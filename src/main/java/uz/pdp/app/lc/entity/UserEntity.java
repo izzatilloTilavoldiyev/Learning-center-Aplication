@@ -1,16 +1,17 @@
 package uz.pdp.app.lc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import uz.pdp.app.lc.entity.base.BaseEntity;
-import uz.pdp.app.lc.entity.enums.UserRole;
+import uz.pdp.app.lc.enums.UserRole;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-@Entity
+@Entity(name = "users")
 public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
@@ -21,22 +22,18 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
-    private Integer password;
-
-    @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    @JsonIgnore
+    @Column(nullable = false)
+    private String password;
 
     @Column(nullable = false)
     private Integer age;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ProfileEntity profileEntity;
+    private String bio;
 
-    private Boolean deleted;
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
-    @PrePersist
-    public void setDefaultDeleted() {
-        this.deleted = false;
-    }
+    private boolean deleted;
 
 }

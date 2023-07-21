@@ -1,16 +1,19 @@
 package uz.pdp.app.lc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import uz.pdp.app.lc.entity.attachment.AttachmentEntity;
 import uz.pdp.app.lc.entity.base.BaseEntity;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-@Entity
+@Entity(name = "homework")
 public class HomeworkEntity extends BaseEntity {
 
     @Column(nullable = false)
@@ -19,7 +22,13 @@ public class HomeworkEntity extends BaseEntity {
     @Column(nullable = false)
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private AttachmentEntity attachment;
+    private boolean deleted;
+
+    @JsonIgnore
+    @ManyToMany
+    private Set<GroupEntity> groupEntity;
+
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private AttachmentEntity attachment;
 
 }

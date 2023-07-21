@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@Entity
+@Entity(name = "courses")
 public class CourseEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
@@ -25,10 +25,6 @@ public class CourseEntity extends BaseEntity {
     @ManyToMany
     private Set<UserEntity> teachers;
 
-    private Boolean deleted;
+    private boolean deleted;
 
-    @PrePersist
-    public void setDefaultDeleted() {
-        this.deleted = false;
-    }
 }

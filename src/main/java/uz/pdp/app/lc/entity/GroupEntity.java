@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@Entity
+@Entity(name = "groups")
 public class GroupEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
@@ -25,11 +25,6 @@ public class GroupEntity extends BaseEntity {
     @ManyToMany
     private Set<UserEntity> students;
 
-    private Boolean deleted;
-
-    @PrePersist
-    public void setDefaultDeleted() {
-        this.deleted = false;
-    }
+    private boolean deleted;
 
 }

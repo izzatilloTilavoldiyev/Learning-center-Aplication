@@ -1,4 +1,4 @@
-package uz.pdp.app.lc.entity.enums;
+package uz.pdp.app.lc.enums;
 
 public enum UserRole {
     MANAGER,  //1
