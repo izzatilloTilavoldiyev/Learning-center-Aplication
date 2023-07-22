@@ -10,7 +10,6 @@ import uz.pdp.app.lc.dto.UserUpdateDTO;
 import uz.pdp.app.lc.entity.UserEntity;
 import uz.pdp.app.lc.exception.DataNotFoundException;
 import uz.pdp.app.lc.exception.DuplicateValueException;
-import uz.pdp.app.lc.mapper.UserMapper;
 import uz.pdp.app.lc.repository.UserRepository;
 
 import static uz.pdp.app.lc.mapper.UserMapper.USER_MAPPER;
@@ -65,6 +64,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public Page<UserEntity> getAllTeachers(Integer page, Integer size) {
         return userRepository.findAllTeachers(PageRequest.of(page, size));
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return userRepository.countById(id) > 0;
     }
 
     private UserEntity getUserById(Long userId) {

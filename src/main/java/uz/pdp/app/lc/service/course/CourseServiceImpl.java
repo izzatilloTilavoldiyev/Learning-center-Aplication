@@ -3,14 +3,17 @@ package uz.pdp.app.lc.service.course;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.app.lc.dto.CourseCreateDTO;
+import uz.pdp.app.lc.dto.CourseTeacherDTO;
 import uz.pdp.app.lc.dto.CourseUpdateDTO;
 import uz.pdp.app.lc.entity.CourseEntity;
 import uz.pdp.app.lc.entity.UserEntity;
 import uz.pdp.app.lc.exception.DataNotFoundException;
 import uz.pdp.app.lc.exception.DuplicateValueException;
 import uz.pdp.app.lc.repository.CourseRepository;
+import uz.pdp.app.lc.service.user.UserService;
 
 import java.util.List;
+import java.util.Set;
 
 import static uz.pdp.app.lc.mapper.CourseMapper.COURSE_MAPPER;
 
@@ -19,6 +22,8 @@ import static uz.pdp.app.lc.mapper.CourseMapper.COURSE_MAPPER;
 public class CourseServiceImpl implements CourseService{
 
     private final CourseRepository courseRepository;
+
+    private final UserService userService;
 
     @Override
     public CourseEntity addCourse(CourseCreateDTO createDTO) {
@@ -46,6 +51,14 @@ public class CourseServiceImpl implements CourseService{
     public void deleteById(Long id) {
         CourseEntity courseEntity = getCourseById(id);
         courseEntity.setDeleted(true);
+        courseRepository.save(courseEntity);
+    }
+
+    @Override
+    public void addTeacherToCourse(CourseTeacherDTO dto) {
+        CourseEntity courseEntity = getCourseById(dto.courseID());
+        UserEntity teacher = userService.getById(dto.teacherID());
+        courseEntity.setTeachers(Set.of(teacher));
         courseRepository.save(courseEntity);
     }
 

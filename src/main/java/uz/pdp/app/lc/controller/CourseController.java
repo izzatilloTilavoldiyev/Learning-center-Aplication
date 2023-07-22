@@ -1,9 +1,11 @@
-package uz.pdp.app.lc.service.user.controller;
+package uz.pdp.app.lc.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.app.lc.dto.CourseCreateDTO;
+import uz.pdp.app.lc.dto.CourseTeacherDTO;
 import uz.pdp.app.lc.dto.CourseUpdateDTO;
 import uz.pdp.app.lc.dto.ResponseDTO;
 import uz.pdp.app.lc.entity.CourseEntity;
@@ -34,15 +36,23 @@ public class CourseController {
         return ResponseEntity.ok(new ResponseDTO<>("Success"));
     }
 
-    @PutMapping("/get/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<ResponseDTO<CourseEntity>> updateCourse(@PathVariable Long id) {
         return ResponseEntity.ok(new ResponseDTO<>(courseService.GetById(id)));
     }
 
-    @PutMapping("/get/all-courses")
+    @GetMapping("/get/all-courses")
     public ResponseEntity<ResponseDTO<List<CourseEntity>>> updateCourse() {
         List<CourseEntity> coursesList = courseService.getAll();
         return ResponseEntity.ok(new ResponseDTO<>(coursesList));
+    }
+
+    @PostMapping("/add/course-teacher")
+    public ResponseEntity<ResponseDTO<String>> addTeacherToCourse(
+            @Valid @RequestBody CourseTeacherDTO courseTeacherDTO
+    ) {
+        courseService.addTeacherToCourse(courseTeacherDTO);
+        return ResponseEntity.ok(new ResponseDTO<>("success"));
     }
 
 }

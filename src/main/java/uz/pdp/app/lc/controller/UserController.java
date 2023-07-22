@@ -1,4 +1,4 @@
-package uz.pdp.app.lc.service.user.controller;
+package uz.pdp.app.lc.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -24,4 +24,6 @@ public interface UserService {
 
     Page<UserEntity> getAllTeachers(Integer page, Integer size);
 
+    boolean existsById(Long id);
+
 }

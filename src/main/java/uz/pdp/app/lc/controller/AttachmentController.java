@@ -1,4 +1,4 @@
-package uz.pdp.app.lc.service.user.controller;
+package uz.pdp.app.lc.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
