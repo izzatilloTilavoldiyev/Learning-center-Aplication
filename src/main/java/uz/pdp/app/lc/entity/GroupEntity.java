@@ -1,10 +1,7 @@
 package uz.pdp.app.lc.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 import lombok.*;
 import uz.pdp.app.lc.entity.base.BaseEntity;
 
@@ -20,6 +17,12 @@ public class GroupEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private CourseEntity courseEntity;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserEntity userEntity;
 
     @JsonIgnore
     @ManyToMany

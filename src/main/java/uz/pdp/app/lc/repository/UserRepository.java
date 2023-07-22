@@ -25,4 +25,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "select count(u.id) from users u where u.id = :id and u.deleted = false ")
     int countById(Long id);
+
+    @Query(value = "select count(u.id) from users u where u.id = :id and u.userRole = 'TEACHER' and u.deleted = false ")
+    int countByTeacherId(Long id);
 }

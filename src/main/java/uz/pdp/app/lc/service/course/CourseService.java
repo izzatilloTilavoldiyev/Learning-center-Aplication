@@ -14,12 +14,14 @@ public interface CourseService {
 
     CourseEntity updateCourse(CourseUpdateDTO updateDTO);
 
-    CourseEntity GetById(Long id);
+    CourseEntity getById(Long id);
 
     List<CourseEntity> getAll();
 
     void deleteById(Long id);
 
     void addTeacherToCourse(CourseTeacherDTO dto);
+
+    boolean existsById(Long id);
 
 }

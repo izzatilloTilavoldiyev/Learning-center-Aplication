@@ -38,7 +38,7 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public CourseEntity GetById(Long id) {
+    public CourseEntity getById(Long id) {
         return getCourseById(id);
     }
 
@@ -60,6 +60,11 @@ public class CourseServiceImpl implements CourseService{
         UserEntity teacher = userService.getById(dto.teacherID());
         courseEntity.setTeachers(Set.of(teacher));
         courseRepository.save(courseEntity);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return courseRepository.countById(id) > 0;
     }
 
     private CourseEntity getCourseById(Long id) {

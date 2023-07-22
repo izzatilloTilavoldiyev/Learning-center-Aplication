@@ -26,4 +26,6 @@ public interface UserService {
 
     boolean existsById(Long id);
 
+    boolean teacherExistsById(Long id);
+
 }

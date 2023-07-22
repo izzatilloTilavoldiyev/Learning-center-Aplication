@@ -9,6 +9,7 @@ import uz.pdp.app.lc.dto.HomeworkUpdateDTO;
 import uz.pdp.app.lc.entity.HomeworkEntity;
 import uz.pdp.app.lc.exception.DataNotFoundException;
 import uz.pdp.app.lc.repository.HomeworkRepository;
+import uz.pdp.app.lc.service.group.GroupService;
 
 import java.util.List;
 
@@ -20,9 +21,12 @@ public class HomeworkServiceImpl implements HomeworkService{
 
     private final HomeworkRepository homeworkRepository;
 
+    private final GroupService groupService;
+
     @Override
     public HomeworkEntity addHomework(HomeworkCreateDTO dto) {
-        //
+        if (!groupService.existsById(dto.groupId()))
+            throw new DataNotFoundException("This group not found");
         return homeworkRepository.save(HOMEWORK_MAPPER.toEntity(dto));
     }
 

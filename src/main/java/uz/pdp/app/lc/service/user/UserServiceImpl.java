@@ -71,6 +71,11 @@ public class UserServiceImpl implements UserService{
         return userRepository.countById(id) > 0;
     }
 
+    @Override
+    public boolean teacherExistsById(Long id) {
+        return userRepository.countByTeacherId(id) > 0;
+    }
+
     private UserEntity getUserById(Long userId) {
         return userRepository.findUserById(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found")
