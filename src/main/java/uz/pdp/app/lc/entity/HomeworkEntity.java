@@ -25,8 +25,8 @@ public class HomeworkEntity extends BaseEntity {
     private boolean deleted;
 
     @JsonIgnore
-    @ManyToMany
-    private Set<GroupEntity> groupEntity;
+    @OneToOne
+    private GroupEntity groupEntity;
 
 //    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private AttachmentEntity attachment;
