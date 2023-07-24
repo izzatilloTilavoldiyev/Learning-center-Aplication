@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.app.lc.dto.GroupCreateDTO;
 import uz.pdp.app.lc.dto.GroupUpdateDTO;
 import uz.pdp.app.lc.entity.GroupEntity;
+import uz.pdp.app.lc.entity.UserEntity;
 import uz.pdp.app.lc.exception.DataNotFoundException;
 import uz.pdp.app.lc.exception.DuplicateValueException;
 import uz.pdp.app.lc.repository.GroupRepository;
@@ -73,6 +74,14 @@ public class GroupServiceImpl implements GroupService{
         if (!userService.teacherExistsById(id))
             throw new DataNotFoundException("Teacher not found");
         return groupRepository.findGroupsByTeacherId(id);
+    }
+
+    @Override
+    public GroupEntity addStudent(Long groupId, Long studentId) {
+        GroupEntity groupEntity = getGroupById(groupId);
+        UserEntity student = userService.getById(studentId);
+        groupEntity.getStudents().add(student);
+        return groupRepository.save(groupEntity);
     }
 
     @Override

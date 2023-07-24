@@ -58,4 +58,10 @@ public class GroupController {
     public ResponseEntity<ResponseDTO<List<GroupEntity>>> getByTeacherId(@PathVariable Long id) {
         return ResponseEntity.ok(new ResponseDTO<>(groupService.getGroupByTeacherId(id)));
     }
+
+    @PostMapping("/add-student")
+    public ResponseEntity<ResponseDTO<GroupEntity>> addStudent(Long groupId, Long studentId) {
+        GroupEntity groupEntity = groupService.addStudent(groupId, studentId);
+        return ResponseEntity.ok(new ResponseDTO<>(groupEntity));
+    }
 }
