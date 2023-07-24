@@ -55,6 +55,8 @@ public class HomeworkServiceImpl implements HomeworkService{
 
     @Override
     public Page<HomeworkEntity> getByGroupId(int page, int size, Long groupId) {
+        if (groupService.existsById(groupId))
+            throw new DataNotFoundException("Group not found");
         return homeworkRepository.findHomeworkByGroupId(PageRequest.of(page, size), groupId);
     }
 

@@ -26,6 +26,7 @@ public class HomeworkEntity extends BaseEntity {
 
     @JsonIgnore
     @OneToOne
+    @JoinColumn(name = "group_id")
     private GroupEntity groupEntity;
 
 //    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

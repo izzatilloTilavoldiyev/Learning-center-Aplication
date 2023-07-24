@@ -9,6 +9,8 @@ import uz.pdp.app.lc.dto.HomeworkUpdateDTO;
 import uz.pdp.app.lc.entity.GroupEntity;
 import uz.pdp.app.lc.entity.HomeworkEntity;
 
+import java.lang.annotation.Inherited;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface GroupMapper {
 

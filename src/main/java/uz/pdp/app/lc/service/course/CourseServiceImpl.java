@@ -58,7 +58,7 @@ public class CourseServiceImpl implements CourseService{
     public void addTeacherToCourse(CourseTeacherDTO dto) {
         CourseEntity courseEntity = getCourseById(dto.courseID());
         UserEntity teacher = userService.getById(dto.teacherID());
-        courseEntity.setTeachers(Set.of(teacher));
+        courseEntity.getTeachers().add(teacher);
         courseRepository.save(courseEntity);
     }
 

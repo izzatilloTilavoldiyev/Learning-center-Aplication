@@ -19,9 +19,11 @@ public class GroupEntity extends BaseEntity {
     private String name;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
     private CourseEntity courseEntity;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
     @JsonIgnore

@@ -31,7 +31,11 @@ public class GroupServiceImpl implements GroupService{
             throw new DuplicateValueException("Course not found");
         if (!userService.teacherExistsById(dto.teacherId()))
             throw new DuplicateValueException("Teacher not found");
-        return groupRepository.save(GROUP_MAPPER.toEntity(dto));
+        GroupEntity groupEntity = new GroupEntity();
+        groupEntity.setName(dto.name());
+        groupEntity.setCourseEntity(courseService.getById(dto.courseId()));
+        groupEntity.setUserEntity(userService.getById(dto.teacherId()));
+        return groupRepository.save(groupEntity);
     }
 
     @Override
@@ -59,11 +63,15 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public List<GroupEntity> getGroupByCourseId(Long id) {
+        if (!courseService.existsById(id))
+            throw new DataNotFoundException("Course not found");
         return groupRepository.findGroupsByCourseId(id);
     }
 
     @Override
     public List<GroupEntity> getGroupByTeacherId(Long id) {
+        if (!userService.teacherExistsById(id))
+            throw new DataNotFoundException("Teacher not found");
         return groupRepository.findGroupsByTeacherId(id);
     }
 

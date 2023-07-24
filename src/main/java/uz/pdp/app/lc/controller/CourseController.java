@@ -38,7 +38,7 @@ public class CourseController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<ResponseDTO<CourseEntity>> updateCourse(@PathVariable Long id) {
-        return ResponseEntity.ok(new ResponseDTO<>(courseService.GetById(id)));
+        return ResponseEntity.ok(new ResponseDTO<>(courseService.getById(id)));
     }
 
     @GetMapping("/get/all-courses")
