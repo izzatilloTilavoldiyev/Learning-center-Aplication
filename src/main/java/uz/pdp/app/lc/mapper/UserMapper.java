@@ -12,9 +12,11 @@ public interface UserMapper {
 
     UserMapper USER_MAPPER = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(target = "userRole",source = "role")
+    @Mapping(target = "userRole", source = "role")
     UserEntity toEntity(UserCreateDTO userCreateDTO);
 
+
+    @InheritInverseConfiguration(name = "toEntity")
     UserCreateDTO toDto(UserEntity userEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

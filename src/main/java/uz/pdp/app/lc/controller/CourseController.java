@@ -21,33 +21,33 @@ public class CourseController {
     private final CourseService courseService;
 
     @PostMapping("/add")
-    public ResponseEntity<ResponseDTO<CourseEntity>> addCourse(@RequestBody CourseCreateDTO courseCreateDTO) {
+    public ResponseEntity<ResponseDTO<CourseEntity>> addCourse(@RequestBody @Valid CourseCreateDTO courseCreateDTO) {
         return ResponseEntity.ok(new ResponseDTO<>(courseService.addCourse(courseCreateDTO)));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<ResponseDTO<CourseEntity>> updateCourse(@RequestBody CourseUpdateDTO courseUpdateDTO) {
+    @PutMapping
+    public ResponseEntity<ResponseDTO<CourseEntity>> updateCourse(@RequestBody @Valid CourseUpdateDTO courseUpdateDTO) {
         return ResponseEntity.ok(new ResponseDTO<>(courseService.updateCourse(courseUpdateDTO)));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO<String>> addCourse(@PathVariable Long id) {
         courseService.deleteById(id);
         return ResponseEntity.ok(new ResponseDTO<>("Success"));
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<CourseEntity>> updateCourse(@PathVariable Long id) {
         return ResponseEntity.ok(new ResponseDTO<>(courseService.getById(id)));
     }
 
-    @GetMapping("/get/all-courses")
+    @GetMapping("/all-courses")
     public ResponseEntity<ResponseDTO<List<CourseEntity>>> updateCourse() {
         List<CourseEntity> coursesList = courseService.getAll();
         return ResponseEntity.ok(new ResponseDTO<>(coursesList));
     }
 
-    @PostMapping("/add/course-teacher")
+    @PostMapping("/course-teacher")
     public ResponseEntity<ResponseDTO<String>> addTeacherToCourse(
             @Valid @RequestBody CourseTeacherDTO courseTeacherDTO
     ) {

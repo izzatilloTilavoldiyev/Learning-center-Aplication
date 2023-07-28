@@ -1,13 +1,11 @@
 package uz.pdp.app.lc.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.app.lc.dto.ProfileUpdateDTO;
 import uz.pdp.app.lc.dto.ResponseDTO;
-import uz.pdp.app.lc.dto.UserCreateDTO;
 import uz.pdp.app.lc.dto.UserUpdateDTO;
 import uz.pdp.app.lc.entity.UserEntity;
 import uz.pdp.app.lc.service.user.UserService;
@@ -18,14 +16,6 @@ import uz.pdp.app.lc.service.user.UserService;
 public class UserController {
 
     private final UserService userService;
-
-    @PostMapping("/add")
-    public ResponseEntity<ResponseDTO<UserEntity>> addUser(
-            @Valid @RequestBody UserCreateDTO userCreateDTO
-    ) {
-        UserEntity user = userService.addUser(userCreateDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(user));
-    }
 
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {

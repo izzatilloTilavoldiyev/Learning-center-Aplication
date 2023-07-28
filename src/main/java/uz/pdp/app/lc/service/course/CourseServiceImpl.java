@@ -13,13 +13,12 @@ import uz.pdp.app.lc.repository.CourseRepository;
 import uz.pdp.app.lc.service.user.UserService;
 
 import java.util.List;
-import java.util.Set;
 
 import static uz.pdp.app.lc.mapper.CourseMapper.COURSE_MAPPER;
 
 @Service
 @RequiredArgsConstructor
-public class CourseServiceImpl implements CourseService{
+public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
 
@@ -27,7 +26,7 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public CourseEntity addCourse(CourseCreateDTO createDTO) {
-        if (courseRepository.countByName(createDTO.name()) > 0)
+        if (courseRepository.countByName(createDTO.name()))
             throw new DuplicateValueException("This course already exists");
         return courseRepository.save(COURSE_MAPPER.toEntity(createDTO));
     }

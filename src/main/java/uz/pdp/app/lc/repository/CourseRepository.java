@@ -9,15 +9,15 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
 
-    @Query(value = "select count(c.name) from courses c where c.name = :name and c.deleted = false ")
-    int countByName(String name);
+    @Query(value = "select count(c.name)>0 from courses c where c.name = :name and c.deleted = false ")
+    boolean countByName(String name);
 
-    @Query(value = "select count(c.id) from courses c where c.id =:id and c.deleted = false ")
+    @Query(value = "select count(c) from courses c where c.id =:id and c.deleted = false ")
     int countById(Long id);
 
     @Query(value = "from courses c where c.id = :id and c.deleted = false ")
     Optional<CourseEntity> findCourseById(Long id);
 
-    @Query(value = "from courses c where c.deleted = false ")
+    @Query(value = "from courses c where not c.deleted  ")
     List<CourseEntity> findAllCourses();
 }

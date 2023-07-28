@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByPhoneNumber(String phoneNumber);
 
+    @Query(value = "from users u where u.phoneNumber=:phoneNumber and u.deleted = false ")
+    Optional<UserEntity> findByPhoneNumber(String phoneNumber);
+
     @Query(value = "from users u where u.id=:id and u.deleted=false ")
     Optional<UserEntity> findUserById(Long id);
 
