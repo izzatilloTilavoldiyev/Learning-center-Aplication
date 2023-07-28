@@ -3,6 +3,7 @@ package uz.pdp.app.lc.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.app.lc.dto.ProfileUpdateDTO;
 import uz.pdp.app.lc.dto.ResponseDTO;
@@ -17,6 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {
         return ResponseEntity.ok(new ResponseDTO<>(userService.updateUser(userUpdateDTO)));
@@ -27,6 +29,7 @@ public class UserController {
         return ResponseEntity.ok(new ResponseDTO<>(userService.updateProfile(profileUpdateDTO)));
     }
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseDTO<String>> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
@@ -38,6 +41,7 @@ public class UserController {
         return ResponseEntity.ok(new ResponseDTO<>(userService.getById(id)));
     }
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @GetMapping("/get/all-page")
     public ResponseEntity<ResponseDTO<Page<UserEntity>>> getAll(
             @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -46,6 +50,7 @@ public class UserController {
         return ResponseEntity.ok(new ResponseDTO<>(userService.getAll(page, size)));
     }
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @GetMapping("/get/all-students-page")
     public ResponseEntity<ResponseDTO<Page<UserEntity>>> getAllStudents(
             @RequestParam(required = false, defaultValue = "1") Integer page,
@@ -54,6 +59,7 @@ public class UserController {
         return ResponseEntity.ok(new ResponseDTO<>(userService.getAllStudents(page, size)));
     }
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @GetMapping("/get/all-teachers-page")
     public ResponseEntity<ResponseDTO<Page<UserEntity>>> getAllTeachers(
             @RequestParam(required = false, defaultValue = "0") Integer page,

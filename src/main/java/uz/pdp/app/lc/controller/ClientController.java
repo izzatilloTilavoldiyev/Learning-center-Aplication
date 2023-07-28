@@ -3,6 +3,7 @@ package uz.pdp.app.lc.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.app.lc.dto.ClientDTO;
 import uz.pdp.app.lc.dto.ResponseDTO;
@@ -32,11 +33,13 @@ public class ClientController {
         return ResponseEntity.ok(new ResponseDTO<>(clientService.getById(id)));
     }
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @GetMapping("/get/all")
     public ResponseEntity<ResponseDTO<List<ClientEntity>>> getAll() {
         return ResponseEntity.ok(new ResponseDTO<>(clientService.getAll()));
     }
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseDTO<String>> deleteById(
             @PathVariable Long id

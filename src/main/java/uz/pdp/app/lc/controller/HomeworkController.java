@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.app.lc.dto.HomeworkCreateDTO;
 import uz.pdp.app.lc.dto.HomeworkUpdateDTO;
@@ -18,6 +19,7 @@ public class HomeworkController {
 
     private final HomeworkService homeworkService;
 
+    @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
     @PostMapping("/add")
     public ResponseEntity<ResponseDTO<HomeworkEntity>> addHomework(
             @Valid @RequestBody HomeworkCreateDTO homeworkCreateDTO)
@@ -26,6 +28,7 @@ public class HomeworkController {
         return ResponseEntity.ok(new ResponseDTO<>(homeworkEntity));
     }
 
+    @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO<HomeworkEntity>> updateHomework(
             @RequestBody HomeworkUpdateDTO homeworkUpdateDTO
@@ -34,6 +37,7 @@ public class HomeworkController {
         return ResponseEntity.ok(new ResponseDTO<>(homeworkEntity));
     }
 
+    @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseDTO<String>> deleteHomework(@PathVariable Long id) {
         homeworkService.deleteById(id);
@@ -55,6 +59,7 @@ public class HomeworkController {
         return ResponseEntity.ok(new ResponseDTO<>(byGroupId));
     }
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @GetMapping("/get/all")
     public ResponseEntity<ResponseDTO<Page<HomeworkEntity>>> getAll(
             @RequestParam(required = false, defaultValue = "0") Integer page,
