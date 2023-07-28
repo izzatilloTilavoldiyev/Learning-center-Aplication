@@ -29,11 +29,13 @@ public class AuthenticationService {
     public AuthenticationDTO register(UserCreateDTO userDTO) {
         if (userRepository.existsByPhoneNumber(userDTO.phoneNumber()))
             throw new DuplicateValueException("Phone number already exists");
-        UserEntity user = USER_MAPPER.toEntity(userDTO);
+
+        var user = USER_MAPPER.toEntity(userDTO);
         user.setPassword(passwordEncoder.encode(userDTO.password()));
         userRepository.save(user);
-        var accessToken = jwtService.generateAccessToken((UserDetails) user);
-        var refreshToken = jwtService.generateRefreshToken((UserDetails) user);
+        var accessToken = jwtService.generateAccessToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
         return AuthenticationDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -49,7 +51,7 @@ public class AuthenticationService {
         );
         var user = userRepository.findByPhoneNumber(request.getPhoneNumber())
                 .orElseThrow();
-        var jwtToken = jwtService.generateAccessToken((UserDetails) user);
+        var jwtToken = jwtService.generateAccessToken(user);
         return AuthenticationDTO.builder()
                 .accessToken(jwtToken)
                 .build();
@@ -58,7 +60,7 @@ public class AuthenticationService {
     public AuthenticationDTO getNewAccessToken(Principal principal) {
         UserEntity user = userRepository.findByPhoneNumber(principal.getName())
                 .orElseThrow();
-        String accessToken = jwtService.generateAccessToken((UserDetails) user);
+        String accessToken = jwtService.generateAccessToken(user);
         return AuthenticationDTO.builder().accessToken(accessToken).build();
     }
 }

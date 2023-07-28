@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lc
+    username: postgres
+    password: 4999
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: true
+
+jwt:
+  access:
+    token:
+      expiry: 3600000 # 60 minutes
+      secret:
+        key: sWDi9EK2sdJA/DJiQKyIdZEIwLDZzQtu/K4dcaEmDIg9kiK4bWqozQkDGXqwDLym
+  refresh:
+    token:
+      expiry: 864000000 # 10 days
+      secret:
+        key:
