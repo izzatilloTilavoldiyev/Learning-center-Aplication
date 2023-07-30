@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ClientService {
 
-    ClientEntity addClient(ClientDTO clientDTO);
+    ClientDTO addClient(ClientDTO clientDTO);
 
     ClientEntity getById(Long id);
 

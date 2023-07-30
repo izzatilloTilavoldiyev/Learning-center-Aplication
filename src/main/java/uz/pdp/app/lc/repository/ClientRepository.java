@@ -14,4 +14,6 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     @Query(value = "from clients c where c.deleted = false ")
     List<ClientEntity> getAll();
+
+    boolean existsById(Long id);
 }

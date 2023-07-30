@@ -3,7 +3,6 @@ package uz.pdp.app.lc.service.authentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.pdp.app.lc.config.jwt.JwtService;
@@ -51,9 +50,11 @@ public class AuthenticationService {
         );
         var user = userRepository.findByPhoneNumber(request.getPhoneNumber())
                 .orElseThrow();
-        var jwtToken = jwtService.generateAccessToken(user);
+        var accessToken = jwtService.generateAccessToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationDTO.builder()
-                .accessToken(jwtToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 

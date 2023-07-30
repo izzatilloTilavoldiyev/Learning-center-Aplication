@@ -20,15 +20,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "from users u where u.deleted = false ")
     Page<UserEntity> findAllUsers(PageRequest of);
 
-    @Query(value = "from users u where u.userRole = 'STUDENT' and u.deleted = false ")
+    @Query(value = "from users u where u.role = 'STUDENT' and u.deleted = false ")
     Page<UserEntity> findAllStudents(PageRequest of);
 
-    @Query(value = "from users u where u.userRole = 'TEACHER' and u.deleted = false ")
+    @Query(value = "from users u where u.role = 'TEACHER' and u.deleted = false ")
     Page<UserEntity> findAllTeachers(PageRequest of);
 
     @Query(value = "select count(u.id) from users u where u.id = :id and u.deleted = false ")
     int countById(Long id);
 
-    @Query(value = "select count(u.id) from users u where u.id = :id and u.userRole = 'TEACHER' and u.deleted = false ")
+    @Query(value = "select count(u.id) from users u where u.id = :id and u.role = 'TEACHER' and u.deleted = false ")
     int countByTeacherId(Long id);
 }

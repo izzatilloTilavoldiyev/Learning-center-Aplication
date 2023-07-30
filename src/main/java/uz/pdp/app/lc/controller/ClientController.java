@@ -19,13 +19,15 @@ public class ClientController {
 
     private final ClientService clientService;
 
+    @PreAuthorize(value = "hasAnyRole('MANAGER', 'STUDENT')")
     @PostMapping("/add")
-    public ResponseEntity<ResponseDTO<ClientEntity>> addClient(
+    public ResponseEntity<ResponseDTO<ClientDTO>> addClient(
             @Valid @RequestBody ClientDTO clientDTO
     ) {
         return ResponseEntity.ok(new ResponseDTO<>(clientService.addClient(clientDTO)));
     }
 
+    @PreAuthorize(value = "hasAnyRole('MANAGER', 'STUDENT')")
     @GetMapping("/get/{id}")
     public ResponseEntity<ResponseDTO<ClientEntity>> getClientById(
             @PathVariable Long id

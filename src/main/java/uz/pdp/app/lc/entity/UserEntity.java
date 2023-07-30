@@ -7,8 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.pdp.app.lc.entity.base.BaseEntity;
-import uz.pdp.app.lc.enums.UserRole;
+import uz.pdp.app.lc.enums.Role;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,13 +39,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String bio;
 
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private Role role;
 
     private boolean deleted;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userRole.name()));
+        return role.getAuthorities();
     }
 
     @Override

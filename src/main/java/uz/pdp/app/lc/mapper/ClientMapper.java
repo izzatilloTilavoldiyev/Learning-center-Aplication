@@ -13,4 +13,7 @@ public interface ClientMapper {
     @Mapping(target = "fullName",source = "fullName")
     ClientEntity toEntity(ClientDTO clientDTO);
 
+    @Mapping(target = "fullName",source = "fullName")
+    ClientDTO toDto(ClientEntity clientEntity);
+
 }
