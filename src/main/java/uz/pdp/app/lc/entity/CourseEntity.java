@@ -23,6 +23,9 @@ public class CourseEntity extends BaseEntity {
 
     @JsonIgnore
     @ManyToMany
+    @JoinTable(name = "courses_teachers",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id"))
     private Set<UserEntity> teachers;
 
     private boolean deleted;

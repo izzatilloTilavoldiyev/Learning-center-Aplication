@@ -28,6 +28,9 @@ public class GroupEntity extends BaseEntity {
 
     @JsonIgnore
     @ManyToMany
+    @JoinTable(name = "groups_students",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id"))
     private Set<UserEntity> students;
 
     private boolean deleted;

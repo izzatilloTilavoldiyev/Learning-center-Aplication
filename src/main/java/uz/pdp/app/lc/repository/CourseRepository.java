@@ -18,6 +18,13 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
     @Query(value = "from courses c where c.id = :id and c.deleted = false ")
     Optional<CourseEntity> findCourseById(Long id);
 
-    @Query(value = "from courses c where not c.deleted  ")
+    @Query(value = "from courses c where not c.deleted ")
     List<CourseEntity> findAllCourses();
+
+    @Query(value = "from courses c where c.deleted = true ")
+    List<CourseEntity> findAllDeletedCourses();
+
+    @Query(value = "from courses c join c.teachers t where t.id = :teacherId and not c.deleted ")
+    List<CourseEntity> findCoursesByTeacherId(Long teacherId);
 }
+

@@ -23,26 +23,26 @@ public class CourseController {
 
     @PreAuthorize(value = "hasRole('MANAGER')")
     @PostMapping("/add")
-    public ResponseEntity<ResponseDTO<CourseEntity>> addCourse(@RequestBody @Valid CourseCreateDTO courseCreateDTO) {
-        return ResponseEntity.ok(new ResponseDTO<>(courseService.addCourse(courseCreateDTO)));
+    public ResponseEntity<ResponseDTO<CourseEntity>> addCourse(
+            @RequestBody @Valid CourseCreateDTO courseCreateDTO
+    ) {
+        CourseEntity courseEntity = courseService.addCourse(courseCreateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(courseEntity));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
     @PutMapping
-    public ResponseEntity<ResponseDTO<CourseEntity>> updateCourse(@RequestBody @Valid CourseUpdateDTO courseUpdateDTO) {
-        return ResponseEntity.ok(new ResponseDTO<>(courseService.updateCourse(courseUpdateDTO)));
-    }
-
-    @PreAuthorize(value = "hasRole('MANAGER')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO<String>> deleteById(@PathVariable Long id) {
-        courseService.deleteById(id);
-        return ResponseEntity.ok(new ResponseDTO<>("Success"));
+    public ResponseEntity<ResponseDTO<CourseEntity>> updateCourse(
+            @RequestBody @Valid CourseUpdateDTO courseUpdateDTO
+    ) {
+        CourseEntity courseEntity = courseService.updateCourse(courseUpdateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(courseEntity));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<CourseEntity>> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(new ResponseDTO<>(courseService.getById(id)));
+        CourseEntity courseEntity = courseService.getById(id);
+        return ResponseEntity.ok(new ResponseDTO<>(courseEntity));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
@@ -53,12 +53,35 @@ public class CourseController {
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
-    @PostMapping("/course-teacher")
+    @GetMapping("/all-deleted")
+    public ResponseEntity<ResponseDTO<List<CourseEntity>>> getAllDeletedList() {
+        List<CourseEntity> allDeletedList = courseService.getAllDeletedList();
+        return ResponseEntity.ok(new ResponseDTO<>(allDeletedList));
+    }
+
+    @PreAuthorize(value = "hasAnyRole('MANAGER', 'TEACHER')")
+    @GetMapping("/teacher-courses/{teacherId}")
+    public ResponseEntity<ResponseDTO<List<CourseEntity>>> getTeacherCourses(
+            @PathVariable Long teacherId
+    ) {
+        List<CourseEntity> teacherCourses = courseService.getTeacherCourses(teacherId);
+        return ResponseEntity.ok(new ResponseDTO<>(teacherCourses));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @PostMapping("/add-teacher-to-course")
     public ResponseEntity<ResponseDTO<String>> addTeacherToCourse(
             @Valid @RequestBody CourseTeacherDTO courseTeacherDTO
     ) {
         courseService.addTeacherToCourse(courseTeacherDTO);
         return ResponseEntity.ok(new ResponseDTO<>("success"));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDTO<String>> deleteById(@PathVariable Long id) {
+        courseService.deleteById(id);
+        return ResponseEntity.ok(new ResponseDTO<>("Success"));
     }
 
 }

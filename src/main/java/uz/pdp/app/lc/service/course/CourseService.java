@@ -18,6 +18,10 @@ public interface CourseService {
 
     List<CourseEntity> getAll();
 
+    List<CourseEntity> getAllDeletedList();
+
+    List<CourseEntity> getTeacherCourses(Long teacherId);
+
     void deleteById(Long id);
 
     void addTeacherToCourse(CourseTeacherDTO dto);
