@@ -15,7 +15,6 @@ public interface UserMapper {
     @Mapping(target = "role", source = "role")
     UserEntity toEntity(UserCreateDTO userCreateDTO);
 
-
     @InheritInverseConfiguration(name = "toEntity")
     UserCreateDTO toDto(UserEntity userEntity);
 
