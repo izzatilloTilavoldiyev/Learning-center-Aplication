@@ -12,13 +12,20 @@ spring:
       hibernate:
         format_sql: true
     generate-ddl: true
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 10KB
+      max-file-size: 100MB
+      max-request-size: 150MB
 
 jwt:
   access:
     token:
       expiry: 3600000 # 60 minutes
       secret:
-        key: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+        key: 4563a0853dbc8fef8228d71c68306357b85aa572f55538d96f7371f9f7490ca8
+
   refresh:
     token:
       expiry: 864000000 # 10 days
