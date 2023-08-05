@@ -1,9 +1,7 @@
 package uz.pdp.app.lc.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.Where;
 import uz.pdp.app.lc.entity.base.BaseEntity;
 
 @AllArgsConstructor

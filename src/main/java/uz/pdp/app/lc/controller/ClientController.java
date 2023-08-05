@@ -2,6 +2,7 @@ package uz.pdp.app.lc.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,8 @@ public class ClientController {
     public ResponseEntity<ResponseDTO<ClientDTO>> addClient(
             @Valid @RequestBody ClientDTO clientDTO
     ) {
-        return ResponseEntity.ok(new ResponseDTO<>(clientService.addClient(clientDTO)));
+        ClientDTO client = clientService.addClient(clientDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(client));
     }
 
     @PreAuthorize(value = "hasAnyRole('MANAGER', 'STUDENT')")
@@ -32,13 +34,25 @@ public class ClientController {
     public ResponseEntity<ResponseDTO<ClientEntity>> getClientById(
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(new ResponseDTO<>(clientService.getById(id)));
+        ClientEntity client = clientService.getById(id);
+        return ResponseEntity.ok(new ResponseDTO<>(client));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
     @GetMapping("/get/all")
     public ResponseEntity<ResponseDTO<List<ClientEntity>>> getAll() {
-        return ResponseEntity.ok(new ResponseDTO<>(clientService.getAll()));
+        List<ClientEntity> clientList = clientService.getAll();
+        return ResponseEntity.ok(new ResponseDTO<>(clientList));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/get/all-deleted")
+    public ResponseEntity<ResponseDTO<Page<ClientEntity>>> getAllDeletedPages(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "3") Integer size
+    ) {
+        Page<ClientEntity> allDeletedPages = clientService.getAllDeletedPages(page, size);
+        return ResponseEntity.ok(new ResponseDTO<>(allDeletedPages));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")

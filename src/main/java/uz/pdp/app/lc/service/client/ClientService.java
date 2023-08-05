@@ -1,5 +1,6 @@
 package uz.pdp.app.lc.service.client;
 
+import org.springframework.data.domain.Page;
 import uz.pdp.app.lc.dto.ClientDTO;
 import uz.pdp.app.lc.entity.ClientEntity;
 
@@ -12,6 +13,8 @@ public interface ClientService {
     ClientEntity getById(Long id);
 
     List<ClientEntity> getAll();
+
+    Page<ClientEntity> getAllDeletedPages(Integer page, Integer size);
 
     void deleteById(Long id);
 }

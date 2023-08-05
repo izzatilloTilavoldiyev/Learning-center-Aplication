@@ -1,6 +1,8 @@
 package uz.pdp.app.lc.service.client;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import uz.pdp.app.lc.dto.ClientDTO;
 import uz.pdp.app.lc.entity.ClientEntity;
@@ -32,6 +34,11 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public List<ClientEntity> getAll() {
         return clientRepository.getAll();
+    }
+
+    @Override
+    public Page<ClientEntity> getAllDeletedPages(Integer page, Integer size) {
+        return clientRepository.getDeletedClients(PageRequest.of(page, size));
     }
 
     @Override

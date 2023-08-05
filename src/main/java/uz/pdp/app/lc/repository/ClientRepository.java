@@ -1,5 +1,7 @@
 package uz.pdp.app.lc.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import uz.pdp.app.lc.entity.ClientEntity;
@@ -14,6 +16,9 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     @Query(value = "from clients c where c.deleted = false ")
     List<ClientEntity> getAll();
+
+    @Query(value = "from clients c where c.deleted = true ")
+    Page<ClientEntity> getDeletedClients(PageRequest of);
 
     boolean existsById(Long id);
 }
