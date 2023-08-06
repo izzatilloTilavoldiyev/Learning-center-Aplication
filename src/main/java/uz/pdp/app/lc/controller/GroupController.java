@@ -25,13 +25,13 @@ public class GroupController {
      * ---add student to group
      * ---get by id
      * ---get all
-     * get all deleted groups
+     * ---get all deleted groups
      * ---get teacher's groups
      * ---get student's groups
      * ---get course's groups
-     * update
-     * update teacher
-     * delete
+     * ---update
+     * ---update teacher
+     * ---delete
      * delete student
      */
 
@@ -67,6 +67,14 @@ public class GroupController {
         return ResponseEntity.ok(new ResponseDTO<>(groupList));
     }
 
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/all-deleted")
+    public ResponseEntity<ResponseDTO<List<GroupEntity>>> getAllDeleted() {
+        List<GroupEntity> allDeleted = groupService.getAllDeleted();
+        return ResponseEntity.ok(new ResponseDTO<>(allDeleted));
+
+    }
+
     @PreAuthorize(value = "hasAnyRole({'MANAGER', 'TEACHER'})")
     @GetMapping("/teacher-groups/{id}")
     public ResponseEntity<ResponseDTO<List<GroupEntity>>> getTeacherGroups(@PathVariable Long id) {
@@ -87,12 +95,23 @@ public class GroupController {
         return ResponseEntity.ok(new ResponseDTO<>(groupsList));
     }
 
-    @PreAuthorize(value = "hasRole('MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('MANAGER', 'TEACHER')")
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO<GroupEntity>> updateGroup(
-            @RequestBody GroupUpdateDTO groupUpdateDTO
+            @Valid @RequestBody GroupUpdateDTO groupUpdateDTO
     ) {
         GroupEntity updatedGroup = groupService.updateGroup(groupUpdateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(updatedGroup));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @PutMapping("/change-teacher")
+    public ResponseEntity<ResponseDTO<GroupEntity>> changeTeacher(
+            @RequestParam Long groupId,
+            @RequestParam Long teacherOldId,
+            @RequestParam Long teacherNewId
+    ) {
+        GroupEntity updatedGroup = groupService.changeTeacher(groupId, teacherOldId, teacherNewId);
         return ResponseEntity.ok(new ResponseDTO<>(updatedGroup));
     }
 

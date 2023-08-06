@@ -1,4 +1,6 @@
 package uz.pdp.app.lc.dto;
 
-public record GroupUpdateDTO(String name, Long teacherId, Long id) {
+import jakarta.validation.constraints.NotNull;
+
+public record GroupUpdateDTO(String name, @NotNull Long id) {
 }

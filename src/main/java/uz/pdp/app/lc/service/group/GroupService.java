@@ -10,13 +10,12 @@ public interface GroupService {
 
     GroupEntity addGroup(GroupCreateDTO dto);
 
-    GroupEntity updateGroup(GroupUpdateDTO dto);
-
-    void deleteById(Long id);
+    void addStudent(Long groupId, Long studentId);
 
     GroupEntity getById(Long id);
 
     List<GroupEntity> getAll();
+    List<GroupEntity> getAllDeleted();
 
     List<GroupEntity> getGroupByCourseId(Long id);
 
@@ -24,7 +23,11 @@ public interface GroupService {
 
     List<GroupEntity> getStudentGroups(Long studentId);
 
-    void addStudent(Long groupId, Long studentId);
+    GroupEntity updateGroup(GroupUpdateDTO dto);
+
+    GroupEntity changeTeacher(Long groupId, Long teacherOldId, Long teacherNewId);
+
+    void deleteById(Long id);
 
     boolean existsById(Long id);
 }

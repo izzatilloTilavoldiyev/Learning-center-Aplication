@@ -74,6 +74,11 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    public List<GroupEntity> getAllDeleted() {
+        return groupRepository.findAllDeleted();
+    }
+
+    @Override
     public List<GroupEntity> getTeacherGroups(Long id) {
         if (!userRepository.teacherExistsById(id))
             throw new DataNotFoundException("Teacher not found with '" + id + "' id");
@@ -98,6 +103,23 @@ public class GroupServiceImpl implements GroupService{
     public GroupEntity updateGroup(GroupUpdateDTO dto) {
         GroupEntity groupEntity = getGroupById(dto.id());
         return groupRepository.save(GROUP_MAPPER.partialUpdate(dto, groupEntity));
+    }
+
+    @Override
+    public GroupEntity changeTeacher(Long groupId, Long teacherOldId, Long teacherNewId) {
+        GroupEntity groupEntity = getGroupById(groupId);
+        if (!userRepository.teacherExistsById(teacherOldId))
+            throw new DataNotFoundException("Teacher not found with '" + teacherOldId + "' id");
+
+        if (!groupRepository.teacherExistsInGroup(groupId, teacherOldId))
+            throw new BadRequestException("Teacher not found in this group with '" + teacherOldId + "' id");
+
+        UserEntity newTeacher = userService.getById(teacherNewId);
+        if (!Objects.equals(newTeacher.getRole(), Role.TEACHER))
+            throw new BadRequestException("User has not TEACHER role");
+
+        groupEntity.setUserEntity(newTeacher);
+        return groupRepository.save(groupEntity);
     }
 
     @Override
