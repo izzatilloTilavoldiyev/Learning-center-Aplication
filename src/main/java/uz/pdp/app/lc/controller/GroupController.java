@@ -105,9 +105,9 @@ public class GroupController {
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
-    @PutMapping("/change-teacher")
+    @PutMapping("/change-teacher/{groupId}")
     public ResponseEntity<ResponseDTO<GroupEntity>> changeTeacher(
-            @RequestParam Long groupId,
+            @PathVariable Long groupId,
             @RequestParam Long teacherOldId,
             @RequestParam Long teacherNewId
     ) {
@@ -121,4 +121,15 @@ public class GroupController {
         groupService.deleteById(id);
         return ResponseEntity.ok(new ResponseDTO<>("Success"));
     }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @DeleteMapping("/delete-student/{groupId}")
+    public ResponseEntity<ResponseDTO<String>> deleteStudent(
+            @PathVariable Long groupId,
+            @RequestParam Long studentId
+    ) {
+        groupService.deleteStudent(groupId, studentId);
+        return ResponseEntity.ok(new ResponseDTO<>("Successfully deleted"));
+    }
+
 }

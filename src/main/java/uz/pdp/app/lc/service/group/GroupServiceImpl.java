@@ -130,6 +130,16 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    public void deleteStudent(Long groupId, Long studentId) {
+        GroupEntity groupEntity = getGroupById(groupId);
+        if (!groupRepository.studentExistsInGroup(groupId, studentId))
+            throw new DataNotFoundException("Student not found in this group with '" + studentId + "' id");
+        UserEntity student = userService.getById(studentId);
+        groupEntity.getStudents().remove(student);
+        groupRepository.save(groupEntity);
+    }
+
+    @Override
     public boolean existsById(Long id) {
         return groupRepository.countByName(id) > 0;
     }

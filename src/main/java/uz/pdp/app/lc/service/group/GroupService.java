@@ -29,5 +29,7 @@ public interface GroupService {
 
     void deleteById(Long id);
 
+    void deleteStudent(Long groupId, Long studentId);
+
     boolean existsById(Long id);
 }
