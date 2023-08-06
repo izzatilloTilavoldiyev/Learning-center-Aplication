@@ -23,11 +23,12 @@ public class GroupController {
     /**
      * ---add
      * ---add student to group
-     * get by id
-     * get all
-     * get teacher's groups
-     * get student's groups
-     * get course's groups
+     * ---get by id
+     * ---get all
+     * get all deleted groups
+     * ---get teacher's groups
+     * ---get student's groups
+     * ---get course's groups
      * update
      * update teacher
      * delete
@@ -60,11 +61,39 @@ public class GroupController {
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/all")
+    public ResponseEntity<ResponseDTO<List<GroupEntity>>> getAll() {
+        List<GroupEntity> groupList = groupService.getAll();
+        return ResponseEntity.ok(new ResponseDTO<>(groupList));
+    }
+
+    @PreAuthorize(value = "hasAnyRole({'MANAGER', 'TEACHER'})")
+    @GetMapping("/teacher-groups/{id}")
+    public ResponseEntity<ResponseDTO<List<GroupEntity>>> getTeacherGroups(@PathVariable Long id) {
+        List<GroupEntity> groupsList = groupService.getTeacherGroups(id);
+        return ResponseEntity.ok(new ResponseDTO<>(groupsList));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/get-by-course-id/{id}")
+    public ResponseEntity<ResponseDTO<List<GroupEntity>>> getByCourseId(@PathVariable Long id) {
+        List<GroupEntity> groupsList = groupService.getGroupByCourseId(id);
+        return ResponseEntity.ok(new ResponseDTO<>(groupsList));
+    }
+
+    @GetMapping("/get-by-student-id/{id}")
+    public ResponseEntity<ResponseDTO<List<GroupEntity>>> getByStudentId(@PathVariable Long id) {
+        List<GroupEntity> groupsList = groupService.getStudentGroups(id);
+        return ResponseEntity.ok(new ResponseDTO<>(groupsList));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO<GroupEntity>> updateGroup(
             @RequestBody GroupUpdateDTO groupUpdateDTO
     ) {
-        return ResponseEntity.ok(new ResponseDTO<>(groupService.updateGroup(groupUpdateDTO)));
+        GroupEntity updatedGroup = groupService.updateGroup(groupUpdateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(updatedGroup));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
@@ -72,23 +101,5 @@ public class GroupController {
     public ResponseEntity<ResponseDTO<String>> deleteGroup(@PathVariable Long id) {
         groupService.deleteById(id);
         return ResponseEntity.ok(new ResponseDTO<>("Success"));
-    }
-
-    @PreAuthorize(value = "hasRole('MANAGER')")
-    @GetMapping("/get/all")
-    public ResponseEntity<ResponseDTO<List<GroupEntity>>> getAll() {
-        return ResponseEntity.ok(new ResponseDTO<>(groupService.getAll()));
-    }
-
-    @PreAuthorize(value = "hasRole('MANAGER')")
-    @GetMapping("/get-by-course-id/{id}")
-    public ResponseEntity<ResponseDTO<List<GroupEntity>>> getByCourseId(@PathVariable Long id) {
-        return ResponseEntity.ok(new ResponseDTO<>(groupService.getGroupByCourseId(id)));
-    }
-
-    @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
-    @GetMapping("/get-by-teacher-id/{id}")
-    public ResponseEntity<ResponseDTO<List<GroupEntity>>> getByTeacherId(@PathVariable Long id) {
-        return ResponseEntity.ok(new ResponseDTO<>(groupService.getGroupByTeacherId(id)));
     }
 }

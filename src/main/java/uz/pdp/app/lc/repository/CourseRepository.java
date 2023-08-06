@@ -12,8 +12,8 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
     @Query(value = "select count(c.name)>0 from courses c where c.name = :name and c.deleted = false ")
     boolean countByName(String name);
 
-    @Query(value = "select count(c) from courses c where c.id =:id and c.deleted = false ")
-    int countById(Long id);
+    @Query(value = "select count(c)>0 from courses c where c.id =:id and not c.deleted")
+    boolean existsById(Long id);
 
     @Query(value = "from courses c where c.id = :id and c.deleted = false ")
     Optional<CourseEntity> findCourseById(Long id);

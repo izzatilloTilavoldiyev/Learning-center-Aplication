@@ -80,11 +80,6 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.save(courseEntity);
     }
 
-    @Override
-    public boolean existsById(Long id) {
-        return courseRepository.countById(id) > 0;
-    }
-
     private CourseEntity getCourseById(Long id) {
         return courseRepository.findCourseById(id).orElseThrow(
                 () -> new DataNotFoundException("Course not found")

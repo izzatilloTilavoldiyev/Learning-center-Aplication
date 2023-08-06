@@ -20,7 +20,9 @@ public interface GroupService {
 
     List<GroupEntity> getGroupByCourseId(Long id);
 
-    List<GroupEntity> getGroupByTeacherId(Long id);
+    List<GroupEntity> getTeacherGroups(Long id);
+
+    List<GroupEntity> getStudentGroups(Long studentId);
 
     void addStudent(Long groupId, Long studentId);
 

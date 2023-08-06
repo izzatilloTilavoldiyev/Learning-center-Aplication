@@ -26,6 +26,4 @@ public interface CourseService {
 
     void addTeacherToCourse(CourseTeacherDTO dto);
 
-    boolean existsById(Long id);
-
 }

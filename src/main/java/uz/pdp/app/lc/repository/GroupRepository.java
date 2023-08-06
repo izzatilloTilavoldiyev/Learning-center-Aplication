@@ -25,9 +25,12 @@ public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
     @Query(value = "from groups g where g.deleted = false ")
     List<GroupEntity> findAllGroups();
 
-    @Query(value = "from groups g where g.courseEntity =:id and g.deleted = false ")
+    @Query(value = "from groups g where g.courseEntity.id = :id and not g.deleted")
     List<GroupEntity> findGroupsByCourseId(Long id);
 
-    @Query(value = "from groups g where g.userEntity =:id and g.deleted = false ")
-    List<GroupEntity> findGroupsByTeacherId(Long id);
+    @Query(value = "from groups g where g.userEntity.id = :id and not g.deleted")
+    List<GroupEntity> findAllByTeacherId(Long id);
+
+    @Query(value = "from groups g join g.students s where s.id = :studentId and not g.deleted")
+    List<GroupEntity> findAllByStudentId(Long studentId);
 }
