@@ -10,9 +10,16 @@ import java.util.Optional;
 public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
 
     @Query(value = "select count(g.id) from groups g where g.id =:id and g.deleted = false ")
-    int countByName(Long id);
+    int countByName(Long id); //delete
 
-    @Query(value = "from groups g where g.id =:id and g.deleted = false ")
+    @Query(value = "select count(g.name)>0 from groups g where g.name = :name and not g.deleted")
+    boolean existsByName(String name);
+
+    @Query(value = "select count(g.id)>0 from groups g " +
+            "join g.students s where s.id = :studentId and not g.deleted ")
+    boolean studentExistsById(Long studentId);
+
+    @Query(value = "from groups g where g.id = :id and not g.deleted")
     Optional<GroupEntity> findGroupById(Long id);
 
     @Query(value = "from groups g where g.deleted = false ")

@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService{
 
     private UserEntity getUserById(Long userId) {
         return userRepository.findUserById(userId).orElseThrow(
-                () -> new DataNotFoundException("User not found")
+                () -> new DataNotFoundException("User not found with '" + userId + "' id")
         );
     }
 }

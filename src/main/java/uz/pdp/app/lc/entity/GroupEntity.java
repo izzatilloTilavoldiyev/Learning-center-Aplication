@@ -23,7 +23,7 @@ public class GroupEntity extends BaseEntity {
     private CourseEntity courseEntity;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "teacher_id")
     private UserEntity userEntity;
 
     @JsonIgnore

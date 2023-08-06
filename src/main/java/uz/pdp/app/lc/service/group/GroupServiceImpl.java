@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.app.lc.dto.GroupCreateDTO;
 import uz.pdp.app.lc.dto.GroupUpdateDTO;
+import uz.pdp.app.lc.entity.CourseEntity;
 import uz.pdp.app.lc.entity.GroupEntity;
 import uz.pdp.app.lc.entity.UserEntity;
+import uz.pdp.app.lc.enums.Role;
+import uz.pdp.app.lc.exception.BadRequestException;
 import uz.pdp.app.lc.exception.DataNotFoundException;
 import uz.pdp.app.lc.exception.DuplicateValueException;
 import uz.pdp.app.lc.repository.GroupRepository;
@@ -13,6 +16,7 @@ import uz.pdp.app.lc.service.course.CourseService;
 import uz.pdp.app.lc.service.user.UserService;
 
 import java.util.List;
+import java.util.Objects;
 
 import static uz.pdp.app.lc.mapper.GroupMapper.GROUP_MAPPER;
 
@@ -28,15 +32,31 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public GroupEntity addGroup(GroupCreateDTO dto) {
-        if (!courseService.existsById(dto.courseId()))
-            throw new DuplicateValueException("Course not found");
-        if (!userService.teacherExistsById(dto.teacherId()))
-            throw new DuplicateValueException("Teacher not found");
-        GroupEntity groupEntity = new GroupEntity();
-        groupEntity.setName(dto.name());
-        groupEntity.setCourseEntity(courseService.getById(dto.courseId()));
-        groupEntity.setUserEntity(userService.getById(dto.teacherId()));
-        return groupRepository.save(groupEntity);
+        CourseEntity courseEntity = courseService.getById(dto.courseId());
+        if (groupRepository.existsByName(dto.name()))
+            throw new DuplicateValueException("This group already exists with name '" + dto.name() + "'");
+
+        UserEntity teacher = userService.getById(dto.teacherId());
+        if (!Objects.equals(teacher.getRole(), Role.TEACHER))
+            throw new BadRequestException("This user has not TEACHER role");
+
+        GroupEntity group = GROUP_MAPPER.toEntity(dto);
+        group.setCourseEntity(courseEntity);
+        group.setUserEntity(teacher);
+        return groupRepository.save(group);
+    }
+
+    @Override
+    public void addStudent(Long groupId, Long studentId) {
+        GroupEntity groupEntity = getGroupById(groupId);
+        UserEntity student = userService.getById(studentId);
+        if (!Objects.equals(student.getRole(), Role.STUDENT))
+            throw new BadRequestException("User has not STUDENT role");
+        if (groupRepository.studentExistsById(studentId))
+            throw new DuplicateValueException(
+                    "Student already exists in this group with '" + studentId + "' id");
+        groupEntity.getStudents().add(student);
+        groupRepository.save(groupEntity);
     }
 
     @Override
@@ -77,21 +97,13 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public GroupEntity addStudent(Long groupId, Long studentId) {
-        GroupEntity groupEntity = getGroupById(groupId);
-        UserEntity student = userService.getById(studentId);
-        groupEntity.getStudents().add(student);
-        return groupRepository.save(groupEntity);
-    }
-
-    @Override
     public boolean existsById(Long id) {
         return groupRepository.countByName(id) > 0;
     }
 
     private GroupEntity getGroupById(Long id) {
         return groupRepository.findGroupById(id).orElseThrow(
-                () -> new DataNotFoundException("Group not found")
+                () -> new DataNotFoundException("Group not found with '" + id + "' id")
         );
     }
 }

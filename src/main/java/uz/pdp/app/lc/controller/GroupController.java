@@ -20,12 +20,43 @@ public class GroupController {
 
     private final GroupService groupService;
 
+    /**
+     * ---add
+     * ---add student to group
+     * get by id
+     * get all
+     * get teacher's groups
+     * get student's groups
+     * get course's groups
+     * update
+     * update teacher
+     * delete
+     * delete student
+     */
+
     @PreAuthorize(value = "hasRole('MANAGER')")
     @PostMapping("/add")
     public ResponseEntity<ResponseDTO<GroupEntity>> addGroup(
             @Valid @RequestBody GroupCreateDTO groupCreateDTO
     ) {
-        return ResponseEntity.ok(new ResponseDTO<>(groupService.addGroup(groupCreateDTO)));
+        GroupEntity groupEntity = groupService.addGroup(groupCreateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(groupEntity));
+    }
+
+    @PreAuthorize(value = "hasAnyRole({'MANAGER', 'TEACHER'})")
+    @PostMapping("/add-student")
+    public ResponseEntity<ResponseDTO<String>> addStudent(
+            @RequestParam Long groupId,
+            @RequestParam Long studentId
+    ) {
+        groupService.addStudent(groupId, studentId);
+        return ResponseEntity.ok(new ResponseDTO<>("Successfully added"));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDTO<GroupEntity>> getById(@PathVariable Long id) {
+        GroupEntity groupEntity = groupService.getById(id);
+        return ResponseEntity.ok(new ResponseDTO<>(groupEntity));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
@@ -41,11 +72,6 @@ public class GroupController {
     public ResponseEntity<ResponseDTO<String>> deleteGroup(@PathVariable Long id) {
         groupService.deleteById(id);
         return ResponseEntity.ok(new ResponseDTO<>("Success"));
-    }
-
-    @GetMapping("/get/{id}")
-    public ResponseEntity<ResponseDTO<GroupEntity>> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(new ResponseDTO<>(groupService.getById(id)));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
@@ -64,12 +90,5 @@ public class GroupController {
     @GetMapping("/get-by-teacher-id/{id}")
     public ResponseEntity<ResponseDTO<List<GroupEntity>>> getByTeacherId(@PathVariable Long id) {
         return ResponseEntity.ok(new ResponseDTO<>(groupService.getGroupByTeacherId(id)));
-    }
-
-    @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
-    @PostMapping("/add-student")
-    public ResponseEntity<ResponseDTO<GroupEntity>> addStudent(Long groupId, Long studentId) {
-        GroupEntity groupEntity = groupService.addStudent(groupId, studentId);
-        return ResponseEntity.ok(new ResponseDTO<>(groupEntity));
     }
 }

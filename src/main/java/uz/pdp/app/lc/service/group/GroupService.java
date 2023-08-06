@@ -22,7 +22,7 @@ public interface GroupService {
 
     List<GroupEntity> getGroupByTeacherId(Long id);
 
-    GroupEntity addStudent(Long groupId, Long studentId);
+    void addStudent(Long groupId, Long studentId);
 
     boolean existsById(Long id);
 }
