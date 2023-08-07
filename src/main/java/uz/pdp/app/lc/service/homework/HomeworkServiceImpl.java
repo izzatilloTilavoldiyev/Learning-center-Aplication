@@ -12,7 +12,9 @@ import uz.pdp.app.lc.entity.UserEntity;
 import uz.pdp.app.lc.enums.Role;
 import uz.pdp.app.lc.exception.BadRequestException;
 import uz.pdp.app.lc.exception.DataNotFoundException;
+import uz.pdp.app.lc.repository.GroupRepository;
 import uz.pdp.app.lc.repository.HomeworkRepository;
+import uz.pdp.app.lc.repository.UserRepository;
 import uz.pdp.app.lc.service.group.GroupService;
 import uz.pdp.app.lc.service.user.UserService;
 
@@ -27,8 +29,10 @@ public class HomeworkServiceImpl implements HomeworkService{
     private final HomeworkRepository homeworkRepository;
 
     private final GroupService groupService;
+    private final GroupRepository groupRepository;
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public HomeworkEntity addHomework(HomeworkCreateDTO dto) {
@@ -75,9 +79,16 @@ public class HomeworkServiceImpl implements HomeworkService{
 
     @Override
     public Page<HomeworkEntity> getByGroupId(int page, int size, Long groupId) {
-//        if (groupService.existsById(groupId))
-//            throw new DataNotFoundException("Group not found");
+        if (!groupRepository.existsGroupById(groupId))
+            throw new DataNotFoundException("Group not found with '" + groupId + "' id");
         return homeworkRepository.findHomeworkByGroupId(PageRequest.of(page, size), groupId);
+    }
+
+    @Override
+    public Page<HomeworkEntity> getByCreatedById(int page, int size, Long createdById) {
+        if (!userRepository.teacherExistsById(createdById))
+            throw new DataNotFoundException("Teacher not found with '" + createdById + "' id");
+        return homeworkRepository.findHomeworkByCreatById(PageRequest.of(page, size), createdById);
     }
 
     private HomeworkEntity getHomeworkById(Long id) {

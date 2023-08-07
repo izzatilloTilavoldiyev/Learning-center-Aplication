@@ -20,6 +20,9 @@ public interface HomeworkRepository extends JpaRepository<HomeworkEntity, Long> 
     @Query(value = "from homework h where h.deleted = true ")
     Page<HomeworkEntity> findAllDeletedHomework(PageRequest of);
 
-    @Query(value = "from homework h where h.groupEntity =:groupId and h.deleted = false ")
+    @Query(value = "from homework h where h.groupEntity.id = :groupId and not h.deleted")
     Page<HomeworkEntity> findHomeworkByGroupId(PageRequest of, Long groupId);
+
+    @Query(value = "from homework h where h.createdBy.id = :createdById and not h.deleted")
+    Page<HomeworkEntity> findHomeworkByCreatById(PageRequest of, Long createdById);
 }

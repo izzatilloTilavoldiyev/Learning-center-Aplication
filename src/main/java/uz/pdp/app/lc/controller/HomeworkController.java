@@ -23,9 +23,9 @@ public class HomeworkController {
      * ---add
      * ---get by id
      * ---get all
-     * get deleted
-     * get by group id
-     * get by teacher id
+     * ---get deleted
+     * ---get by group id
+     * ---get by teacher id
      * update
      * delete
      */
@@ -65,22 +65,6 @@ public class HomeworkController {
         return ResponseEntity.ok(new ResponseDTO<>(allHomeworks));
     }
 
-    @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
-    @PutMapping("/update")
-    public ResponseEntity<ResponseDTO<HomeworkEntity>> updateHomework(
-            @RequestBody HomeworkUpdateDTO homeworkUpdateDTO
-    ) {
-        HomeworkEntity homeworkEntity = homeworkService.updateHomework(homeworkUpdateDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(homeworkEntity));
-    }
-
-    @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDTO<String>> deleteHomework(@PathVariable Long id) {
-        homeworkService.deleteById(id);
-        return ResponseEntity.ok(new ResponseDTO<>("Success"));
-    }
-
     @GetMapping("/get-by-group-id/{id}")
     public ResponseEntity<ResponseDTO<Page<HomeworkEntity>>> getByGroupId(
             @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -88,5 +72,31 @@ public class HomeworkController {
             @PathVariable Long id) {
         Page<HomeworkEntity> byGroupId = homeworkService.getByGroupId(page, size, id);
         return ResponseEntity.ok(new ResponseDTO<>(byGroupId));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/get-by-created-by-id/{id}")
+    public ResponseEntity<ResponseDTO<Page<HomeworkEntity>>> getByCreatedById(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size,
+            @PathVariable Long id) {
+        Page<HomeworkEntity> homeworkPages = homeworkService.getByCreatedById(page, size, id);
+        return ResponseEntity.ok(new ResponseDTO<>(homeworkPages));
+    }
+
+    @PreAuthorize(value = "hasAnyRole({'MANAGER', 'TEACHER'})")
+    @PutMapping()
+    public ResponseEntity<ResponseDTO<HomeworkEntity>> updateHomework(
+            @RequestBody HomeworkUpdateDTO homeworkUpdateDTO
+    ) {
+        HomeworkEntity homeworkEntity = homeworkService.updateHomework(homeworkUpdateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(homeworkEntity));
+    }
+
+    @PreAuthorize(value = "hasAnyRole({'MANAGER', 'TEACHER'})")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDTO<String>> deleteHomework(@PathVariable Long id) {
+        homeworkService.deleteById(id);
+        return ResponseEntity.ok(new ResponseDTO<>("Success"));
     }
 }

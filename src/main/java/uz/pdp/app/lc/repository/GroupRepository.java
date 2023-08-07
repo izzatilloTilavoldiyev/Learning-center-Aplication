@@ -41,4 +41,7 @@ public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
             "join g.students s where g.id = :groupId and s.id = :studentId")
     boolean studentExistsInGroup(Long groupId, Long studentId);
 
+    @Query(value = "select count(g.id)>0 from groups g where g.id = :groupId and not g.deleted")
+    boolean existsGroupById(Long groupId);
+
 }
