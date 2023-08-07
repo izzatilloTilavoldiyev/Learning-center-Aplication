@@ -24,7 +24,7 @@ jwt:
     token:
       expiry: 3600000 # 60 minutes
       secret:
-        key: 109c7bb791c841e20d6f13745ecd066c19c7fc3a821b0b3d2c1d0eb766dda35d
+        key: 8fce566a663ac925601d68855a56cf9f7947151b0ef92ff9ee4b7aaadfff8fba
 
   refresh:
     token:

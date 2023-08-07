@@ -32,7 +32,7 @@ public class GroupController {
      * ---update
      * ---update teacher
      * ---delete
-     * delete student
+     * ---delete student
      */
 
     @PreAuthorize(value = "hasRole('MANAGER')")

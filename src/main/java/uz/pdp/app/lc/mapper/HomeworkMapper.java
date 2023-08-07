@@ -14,9 +14,9 @@ public interface HomeworkMapper {
 
     HomeworkMapper HOMEWORK_MAPPER = Mappers.getMapper(HomeworkMapper.class);
 
-    HomeworkEntity toEntity(HomeworkCreateDTO homeworkCreateDTO);
+//    HomeworkEntity toEntity(HomeworkCreateDTO homeworkCreateDTO);
 
-    HomeworkCreateDTO toDto(HomeworkEntity homeworkEntity);
+//    HomeworkCreateDTO toDto(HomeworkEntity homeworkEntity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     HomeworkEntity partialUpdate(HomeworkUpdateDTO homeworkUpdateDTO, @MappingTarget HomeworkEntity homeworkEntity);

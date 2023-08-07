@@ -11,11 +11,14 @@ import java.util.Optional;
 
 public interface HomeworkRepository extends JpaRepository<HomeworkEntity, Long> {
 
-    @Query(value = "from homework h where h.id =:id and h.deleted = false ")
+    @Query(value = "from homework h where h.id =:id and not h.deleted")
     Optional<HomeworkEntity> findHomeworkById(Long id);
 
-    @Query(value = "from homework h where h.deleted = false ")
+    @Query(value = "from homework h where not h.deleted")
     Page<HomeworkEntity> findAllHomework(PageRequest of);
+
+    @Query(value = "from homework h where h.deleted = true ")
+    Page<HomeworkEntity> findAllDeletedHomework(PageRequest of);
 
     @Query(value = "from homework h where h.groupEntity =:groupId and h.deleted = false ")
     Page<HomeworkEntity> findHomeworkByGroupId(PageRequest of, Long groupId);

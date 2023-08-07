@@ -139,11 +139,6 @@ public class GroupServiceImpl implements GroupService{
         groupRepository.save(groupEntity);
     }
 
-    @Override
-    public boolean existsById(Long id) {
-        return groupRepository.countByName(id) > 0;
-    }
-
     private GroupEntity getGroupById(Long id) {
         return groupRepository.findGroupById(id).orElseThrow(
                 () -> new DataNotFoundException("Group not found with '" + id + "' id")

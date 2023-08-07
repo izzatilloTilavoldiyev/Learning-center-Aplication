@@ -19,13 +19,50 @@ public class HomeworkController {
 
     private final HomeworkService homeworkService;
 
-    @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
+    /**
+     * ---add
+     * ---get by id
+     * ---get all
+     * get deleted
+     * get by group id
+     * get by teacher id
+     * update
+     * delete
+     */
+
+    @PreAuthorize(value = "hasAnyRole({'MANAGER', 'TEACHER'})")
     @PostMapping("/add")
     public ResponseEntity<ResponseDTO<HomeworkEntity>> addHomework(
             @Valid @RequestBody HomeworkCreateDTO homeworkCreateDTO)
     {
         HomeworkEntity homeworkEntity = homeworkService.addHomework(homeworkCreateDTO);
         return ResponseEntity.ok(new ResponseDTO<>(homeworkEntity));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDTO<HomeworkEntity>> getById(@PathVariable Long id) {
+        HomeworkEntity homeworkEntity = homeworkService.getById(id);
+        return ResponseEntity.ok(new ResponseDTO<>(homeworkEntity));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/all")
+    public ResponseEntity<ResponseDTO<Page<HomeworkEntity>>> getAll(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size
+    ) {
+        Page<HomeworkEntity> allHomeworks = homeworkService.getAll(page, size);
+        return ResponseEntity.ok(new ResponseDTO<>(allHomeworks));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/all-deleted")
+    public ResponseEntity<ResponseDTO<Page<HomeworkEntity>>> getAllDeleted(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size
+    ) {
+        Page<HomeworkEntity> allHomeworks = homeworkService.getAllDeleted(page, size);
+        return ResponseEntity.ok(new ResponseDTO<>(allHomeworks));
     }
 
     @PreAuthorize(value = "hasRole({'MANAGER', 'TEACHER'})")
@@ -44,12 +81,6 @@ public class HomeworkController {
         return ResponseEntity.ok(new ResponseDTO<>("Success"));
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<ResponseDTO<HomeworkEntity>> getById(@PathVariable Long id) {
-        HomeworkEntity homeworkEntity = homeworkService.getById(id);
-        return ResponseEntity.ok(new ResponseDTO<>(homeworkEntity));
-    }
-
     @GetMapping("/get-by-group-id/{id}")
     public ResponseEntity<ResponseDTO<Page<HomeworkEntity>>> getByGroupId(
             @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -57,15 +88,5 @@ public class HomeworkController {
             @PathVariable Long id) {
         Page<HomeworkEntity> byGroupId = homeworkService.getByGroupId(page, size, id);
         return ResponseEntity.ok(new ResponseDTO<>(byGroupId));
-    }
-
-    @PreAuthorize(value = "hasRole('MANAGER')")
-    @GetMapping("/get/all")
-    public ResponseEntity<ResponseDTO<Page<HomeworkEntity>>> getAll(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "20") Integer size
-    ) {
-        Page<HomeworkEntity> all = homeworkService.getAll(page, size);
-        return ResponseEntity.ok(new ResponseDTO<>(all));
     }
 }

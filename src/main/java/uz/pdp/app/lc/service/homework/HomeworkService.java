@@ -18,6 +18,7 @@ public interface HomeworkService {
     HomeworkEntity getById(Long id);
 
     Page<HomeworkEntity> getAll(int page, int size);
+    Page<HomeworkEntity> getAllDeleted(int page, int size);
 
     Page<HomeworkEntity> getByGroupId(int page, int size, Long groupId);
 

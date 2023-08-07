@@ -6,12 +6,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import uz.pdp.app.lc.dto.HomeworkCreateDTO;
 import uz.pdp.app.lc.dto.HomeworkUpdateDTO;
+import uz.pdp.app.lc.entity.GroupEntity;
 import uz.pdp.app.lc.entity.HomeworkEntity;
+import uz.pdp.app.lc.entity.UserEntity;
+import uz.pdp.app.lc.enums.Role;
+import uz.pdp.app.lc.exception.BadRequestException;
 import uz.pdp.app.lc.exception.DataNotFoundException;
 import uz.pdp.app.lc.repository.HomeworkRepository;
 import uz.pdp.app.lc.service.group.GroupService;
+import uz.pdp.app.lc.service.user.UserService;
 
-import java.util.List;
+import java.util.Objects;
 
 import static uz.pdp.app.lc.mapper.HomeworkMapper.HOMEWORK_MAPPER;
 
@@ -23,11 +28,21 @@ public class HomeworkServiceImpl implements HomeworkService{
 
     private final GroupService groupService;
 
+    private final UserService userService;
+
     @Override
     public HomeworkEntity addHomework(HomeworkCreateDTO dto) {
-        if (!groupService.existsById(dto.groupId()))
-            throw new DataNotFoundException("This group not found");
-        return homeworkRepository.save(HOMEWORK_MAPPER.toEntity(dto));
+        GroupEntity groupEntity = groupService.getById(dto.groupId());
+        UserEntity teacher = userService.getById(dto.createdBy());
+        if (!Objects.equals(teacher.getRole(), Role.TEACHER))
+            throw new BadRequestException("User not have TEACHER role");
+        HomeworkEntity homeworkEntity = HomeworkEntity.builder()
+                .title(dto.title())
+                .description(dto.description())
+                .groupEntity(groupEntity)
+                .createdBy(teacher)
+                .build();
+        return homeworkRepository.save(homeworkEntity);
     }
 
     @Override
@@ -54,15 +69,20 @@ public class HomeworkServiceImpl implements HomeworkService{
     }
 
     @Override
+    public Page<HomeworkEntity> getAllDeleted(int page, int size) {
+        return homeworkRepository.findAllDeletedHomework(PageRequest.of(page, size));
+    }
+
+    @Override
     public Page<HomeworkEntity> getByGroupId(int page, int size, Long groupId) {
-        if (groupService.existsById(groupId))
-            throw new DataNotFoundException("Group not found");
+//        if (groupService.existsById(groupId))
+//            throw new DataNotFoundException("Group not found");
         return homeworkRepository.findHomeworkByGroupId(PageRequest.of(page, size), groupId);
     }
 
     private HomeworkEntity getHomeworkById(Long id) {
         return homeworkRepository.findHomeworkById(id).orElseThrow(
-                () -> new DataNotFoundException("Homework not found")
+                () -> new DataNotFoundException("Homework not found with '" + id + "' id")
         );
     }
 }

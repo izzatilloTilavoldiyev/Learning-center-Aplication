@@ -24,8 +24,11 @@ public class HomeworkEntity extends BaseEntity {
     private boolean deleted;
 
     @JsonIgnore
-    @OneToOne
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "group_id")
     private GroupEntity groupEntity;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    private UserEntity createdBy;
 
 }

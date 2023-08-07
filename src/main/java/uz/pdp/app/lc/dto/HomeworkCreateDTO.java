@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 public record HomeworkCreateDTO(
         @NotBlank String title,
         @NotBlank String description,
-        @NotNull Long groupId
+        @NotNull Long groupId,
+
+        @NotNull Long createdBy
 ) {
 }
