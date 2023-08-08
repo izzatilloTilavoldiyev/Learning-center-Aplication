@@ -26,8 +26,8 @@ public class HomeworkController {
      * ---get deleted
      * ---get by group id
      * ---get by teacher id
-     * update
-     * delete
+     * ---update
+     * ---delete
      */
 
     @PreAuthorize(value = "hasAnyRole({'MANAGER', 'TEACHER'})")

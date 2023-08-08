@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
+                .requestMatchers(AUTH_WHITELIST)
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -39,4 +39,12 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+    private static final String[] AUTH_WHITELIST = {
+            "api/v1/auth/**",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yml",
+            "/swagger-ui/**",
+            "swagger-ui.html"
+    };
 }
