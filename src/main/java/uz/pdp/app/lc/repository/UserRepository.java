@@ -11,14 +11,17 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByPhoneNumber(String phoneNumber);
 
-    @Query(value = "from users u where u.phoneNumber=:phoneNumber and u.deleted = false ")
+    @Query(value = "from users u where u.phoneNumber = :phoneNumber and not u.deleted")
     Optional<UserEntity> findByPhoneNumber(String phoneNumber);
 
-    @Query(value = "from users u where u.id=:id and u.deleted=false ")
+    @Query(value = "from users u where u.id = :id and not u.deleted")
     Optional<UserEntity> findUserById(Long id);
 
-    @Query(value = "from users u where u.deleted = false ")
+    @Query(value = "from users u where not u.deleted")
     Page<UserEntity> findAllUsers(PageRequest of);
+
+    @Query(value = "from users u where u.deleted = true ")
+    Page<UserEntity> findAllDeletedUsers(PageRequest of);
 
     @Query(value = "from users u where u.role = 'STUDENT' and u.deleted = false ")
     Page<UserEntity> findAllStudents(PageRequest of);
@@ -26,9 +29,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "from users u where u.role = 'TEACHER' and u.deleted = false ")
     Page<UserEntity> findAllTeachers(PageRequest of);
 
-    @Query(value = "select count(u.id)>0 from users u where u.id = :id and u.role = 'TEACHER' and not u.deleted")
+    @Query(value = "select count(u.id)>0 from users u where u.id = :id " +
+            "and u.role = 'TEACHER' and not u.deleted")
     boolean teacherExistsById(Long id);
 
-    @Query(value = "select count(u.id)>0 from users u where u.id = :id and u.role = 'STUDENT' and not u.deleted")
+    @Query(value = "select count(u.id)>0 from users u where u.id = :id " +
+            "and u.role = 'STUDENT' and not u.deleted")
     boolean studentExistsById(Long id);
 }

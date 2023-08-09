@@ -17,41 +17,49 @@ import uz.pdp.app.lc.service.user.UserService;
 public class UserController {
 
     /**
+     * ---create
      *
+     * ---get by id
+     * ---get all pages
+     * get deleted pages
+     * get all teachers pages
+     * get all teachers by course id
+     * get all students pages
+     * get all students by group id
+     * get all students by course id
+     *
+     * update by id
+     * update profile
+     *
+     * delete
      */
 
     private final UserService userService;
 
-    @PreAuthorize(value = "hasRole('MANAGER')")
-    @PutMapping("/update")
-    public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {
-        return ResponseEntity.ok(new ResponseDTO<>(userService.updateUser(userUpdateDTO)));
-    }
-
-    @PutMapping("/update/profile")
-    public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody ProfileUpdateDTO profileUpdateDTO) {
-        return ResponseEntity.ok(new ResponseDTO<>(userService.updateProfile(profileUpdateDTO)));
-    }
-
-    @PreAuthorize(value = "hasRole('MANAGER')")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDTO<String>> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok(new ResponseDTO<>("Success"));
-    }
-
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO<UserEntity>> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(new ResponseDTO<>(userService.getById(id)));
+        UserEntity userEntity = userService.getById(id);
+        return ResponseEntity.ok(new ResponseDTO<>(userEntity));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
-    @GetMapping("/get/all-page")
+    @GetMapping("/all")
     public ResponseEntity<ResponseDTO<Page<UserEntity>>> getAll(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "20") Integer size
     ) {
-        return ResponseEntity.ok(new ResponseDTO<>(userService.getAll(page, size)));
+        Page<UserEntity> allPages = userService.getAll(page, size);
+        return ResponseEntity.ok(new ResponseDTO<>(allPages));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/all-deleted")
+    public ResponseEntity<ResponseDTO<Page<UserEntity>>> getAllDeleted(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size
+    ) {
+        Page<UserEntity> allDeletedPages = userService.getAllDeleted(page, size);
+        return ResponseEntity.ok(new ResponseDTO<>(allDeletedPages));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
@@ -70,6 +78,24 @@ public class UserController {
             @RequestParam(required = false, defaultValue = "3") Integer size
     ) {
         return ResponseEntity.ok(new ResponseDTO<>(userService.getAllTeachers(page, size)));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {
+        return ResponseEntity.ok(new ResponseDTO<>(userService.updateUser(userUpdateDTO)));
+    }
+
+    @PutMapping("/update/profile")
+    public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody ProfileUpdateDTO profileUpdateDTO) {
+        return ResponseEntity.ok(new ResponseDTO<>(userService.updateProfile(profileUpdateDTO)));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseDTO<String>> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok(new ResponseDTO<>("Success"));
     }
 
 

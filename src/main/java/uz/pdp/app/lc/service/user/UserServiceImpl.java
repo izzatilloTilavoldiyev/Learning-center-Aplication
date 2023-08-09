@@ -19,6 +19,31 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
 
     @Override
+    public UserEntity getById(Long id) {
+        return getUserById(id);
+    }
+
+    @Override
+    public Page<UserEntity> getAll(Integer page, Integer size) {
+        return userRepository.findAllUsers(PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<UserEntity> getAllDeleted(Integer page, Integer size) {
+        return userRepository.findAllDeletedUsers(PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<UserEntity> getAllStudents(Integer page, Integer size) {
+        return userRepository.findAllStudents(PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<UserEntity> getAllTeachers(Integer page, Integer size) {
+        return userRepository.findAllTeachers(PageRequest.of(page, size));
+    }
+
+    @Override
     public UserEntity updateUser(UserUpdateDTO userUpdateDTO) {
         UserEntity user = getUserById(userUpdateDTO.userId());
         return userRepository.save(USER_MAPPER.partialUpdate(userUpdateDTO, user));
@@ -34,26 +59,6 @@ public class UserServiceImpl implements UserService{
         UserEntity user = getUserById(id);
         user.setDeleted(true);
         userRepository.save(user);
-    }
-
-    @Override
-    public UserEntity getById(Long id) {
-        return getUserById(id);
-    }
-
-    @Override
-    public Page<UserEntity> getAll(Integer page, Integer size) {
-        return userRepository.findAllUsers(PageRequest.of(page, size));
-    }
-
-    @Override
-    public Page<UserEntity> getAllStudents(Integer page, Integer size) {
-        return userRepository.findAllStudents(PageRequest.of(page, size));
-    }
-
-    @Override
-    public Page<UserEntity> getAllTeachers(Integer page, Integer size) {
-        return userRepository.findAllTeachers(PageRequest.of(page, size));
     }
 
     private UserEntity getUserById(Long userId) {

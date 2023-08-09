@@ -86,7 +86,7 @@ public class HomeworkServiceImpl implements HomeworkService{
 
     @Override
     public Page<HomeworkEntity> getByCreatedById(int page, int size, Long createdById) {
-        if (!userRepository.teacherExistsById(createdById))
+        if (userRepository.teacherExistsById(createdById))
             throw new DataNotFoundException("Teacher not found with '" + createdById + "' id");
         return homeworkRepository.findHomeworkByCreatById(PageRequest.of(page, size), createdById);
     }
