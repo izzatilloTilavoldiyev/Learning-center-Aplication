@@ -16,6 +16,10 @@ import uz.pdp.app.lc.service.user.UserService;
 @RequiredArgsConstructor
 public class UserController {
 
+    /**
+     *
+     */
+
     private final UserService userService;
 
     @PreAuthorize(value = "hasRole('MANAGER')")

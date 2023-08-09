@@ -20,21 +20,24 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationDTO> register(
             @RequestBody UserCreateDTO userCreateDTO
-            ) {
-        return ResponseEntity.ok(authenticationService.register(userCreateDTO));
+    ) {
+        AuthenticationDTO register = authenticationService.register(userCreateDTO);
+        return ResponseEntity.ok(register);
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationDTO> authenticate(
             @RequestBody AuthenticationRequest request
-            ) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    ) {
+        AuthenticationDTO authenticate = authenticationService.authenticate(request);
+        return ResponseEntity.ok(authenticate);
     }
 
     @GetMapping("/refresh-token")
     public ResponseEntity<AuthenticationDTO> refreshToken(
             Principal principal
     ) {
-        return ResponseEntity.ok(authenticationService.getNewAccessToken(principal));
+        AuthenticationDTO newAccessToken = authenticationService.getNewAccessToken(principal);
+        return ResponseEntity.ok(newAccessToken);
     }
 }

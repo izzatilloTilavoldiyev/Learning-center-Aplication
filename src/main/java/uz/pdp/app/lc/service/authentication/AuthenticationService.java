@@ -10,6 +10,7 @@ import uz.pdp.app.lc.dto.AuthenticationDTO;
 import uz.pdp.app.lc.dto.AuthenticationRequest;
 import uz.pdp.app.lc.dto.UserCreateDTO;
 import uz.pdp.app.lc.entity.UserEntity;
+import uz.pdp.app.lc.exception.DataNotFoundException;
 import uz.pdp.app.lc.exception.DuplicateValueException;
 import uz.pdp.app.lc.repository.UserRepository;
 
@@ -48,8 +49,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByPhoneNumber(request.getPhoneNumber())
-                .orElseThrow();
+        UserEntity user = findByPhoneNumber(request.getPhoneNumber());
         var accessToken = jwtService.generateAccessToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationDTO.builder()
@@ -59,9 +59,19 @@ public class AuthenticationService {
     }
 
     public AuthenticationDTO getNewAccessToken(Principal principal) {
-        UserEntity user = userRepository.findByPhoneNumber(principal.getName())
-                .orElseThrow();
+        UserEntity user = findByPhoneNumber(principal.getName());
         String accessToken = jwtService.generateAccessToken(user);
-        return AuthenticationDTO.builder().accessToken(accessToken).build();
+        String refreshToken = jwtService.generateRefreshToken(user);
+        return AuthenticationDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    private UserEntity findByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber).orElseThrow(
+                () -> new DataNotFoundException("User not found with '" + phoneNumber + "' phone number")
+        );
     }
 }
+
