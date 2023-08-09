@@ -80,7 +80,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public List<GroupEntity> getTeacherGroups(Long id) {
-        if (userRepository.teacherExistsById(id))
+        if (!userRepository.teacherExistsById(id))
             throw new DataNotFoundException("Teacher not found with '" + id + "' id");
         return groupRepository.findAllByTeacherId(id);
     }
@@ -108,7 +108,7 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public GroupEntity changeTeacher(Long groupId, Long teacherOldId, Long teacherNewId) {
         GroupEntity groupEntity = getGroupById(groupId);
-        if (userRepository.teacherExistsById(teacherOldId))
+        if (!userRepository.teacherExistsById(teacherOldId))
             throw new DataNotFoundException("Teacher not found with '" + teacherOldId + "' id");
 
         if (!groupRepository.teacherExistsInGroup(groupId, teacherOldId))

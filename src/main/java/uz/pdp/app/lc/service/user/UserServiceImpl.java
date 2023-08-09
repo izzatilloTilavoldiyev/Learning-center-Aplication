@@ -8,6 +8,7 @@ import uz.pdp.app.lc.dto.ProfileUpdateDTO;
 import uz.pdp.app.lc.dto.UserUpdateDTO;
 import uz.pdp.app.lc.entity.UserEntity;
 import uz.pdp.app.lc.exception.DataNotFoundException;
+import uz.pdp.app.lc.repository.CourseRepository;
 import uz.pdp.app.lc.repository.UserRepository;
 
 import static uz.pdp.app.lc.mapper.UserMapper.USER_MAPPER;
@@ -17,6 +18,8 @@ import static uz.pdp.app.lc.mapper.UserMapper.USER_MAPPER;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+
+    private final CourseRepository courseRepository;
 
     @Override
     public UserEntity getById(Long id) {
@@ -40,6 +43,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Page<UserEntity> getTeachersByCourseId(Long courseId, Integer page, Integer size) {
+        if (!courseRepository.existsById(courseId))
+            throw new DataNotFoundException("Course not found with '" + courseId + "' id");
         return userRepository.findTeachersByCourseId(courseId, PageRequest.of(page, size));
     }
 

@@ -93,6 +93,9 @@ public class UserController {
         return ResponseEntity.ok(new ResponseDTO<>(allStudents));
     }
 
+
+
+
     @PreAuthorize(value = "hasRole('MANAGER')")
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {

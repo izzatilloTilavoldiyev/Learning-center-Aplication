@@ -30,7 +30,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseEntity addCourse(CourseCreateDTO createDTO) {
-        if (courseRepository.countByName(createDTO.name()))
+        if (courseRepository.existsByName(createDTO.name()))
             throw new DuplicateValueException("This course already exists");
         return courseRepository.save(COURSE_MAPPER.toEntity(createDTO));
     }

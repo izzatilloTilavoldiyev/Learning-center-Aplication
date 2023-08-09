@@ -9,10 +9,12 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
 
-    @Query(value = "select count(c.name)>0 from courses c where c.name = :name and c.deleted = false ")
-    boolean countByName(String name);
+    @Query(value = "select count(c.name)>0 from courses c " +
+            "where c.name = :name and c.deleted = false ", nativeQuery = true)
+    boolean existsByName(String name);
 
-    @Query(value = "select count(c)>0 from courses c where c.id =:id and not c.deleted")
+    @Query(value = "select count(c)>0 from courses c " +
+            "where c.id =:id and not c.deleted", nativeQuery = true)
     boolean existsById(Long id);
 
     @Query(value = "from courses c where c.id = :id and c.deleted = false ")
@@ -24,7 +26,11 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
     @Query(value = "from courses c where c.deleted = true ")
     List<CourseEntity> findAllDeletedCourses();
 
-    @Query(value = "from courses c join c.teachers t where t.id = :teacherId and not c.deleted ")
+    @Query(value = """
+           select * from courses c join
+           courses_teachers ct on c.id = ct.course_id where
+           ct.teacher_id = :teacherId and not c.deleted
+           """, nativeQuery = true)
     List<CourseEntity> findCoursesByTeacherId(Long teacherId);
 }
 

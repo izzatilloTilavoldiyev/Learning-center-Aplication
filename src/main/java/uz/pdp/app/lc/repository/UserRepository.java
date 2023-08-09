@@ -37,10 +37,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Page<UserEntity> findAllStudents(PageRequest of);
 
     @Query(value = "select count(u.id)>0 from users u where u.id = :id " +
-            "and u.role = 'TEACHER' and not u.deleted")
+            "and u.role = 'TEACHER' and not u.deleted", nativeQuery = true)
     boolean teacherExistsById(Long id);
 
     @Query(value = "select count(u.id)>0 from users u where u.id = :id " +
-            "and u.role = 'STUDENT' and not u.deleted")
+            "and u.role = 'STUDENT' and not u.deleted", nativeQuery = true)
     boolean studentExistsById(Long id);
 }
