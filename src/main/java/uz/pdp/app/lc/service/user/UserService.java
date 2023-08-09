@@ -19,6 +19,10 @@ public interface UserService {
 
     Page<UserEntity> getAllStudents(Integer page, Integer size);
 
+    Page<UserEntity> getStudentsByGroupId(Long groupId, Integer page, Integer size);
+
+    Page<UserEntity> getStudentsByCourseId(Long courseId, Integer page, Integer size);
+
     UserEntity updateUser(UserUpdateDTO userUpdateDTO);
 
     UserEntity updateProfile(ProfileUpdateDTO profileUpdateDTO);

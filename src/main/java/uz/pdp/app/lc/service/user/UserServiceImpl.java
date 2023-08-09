@@ -9,6 +9,7 @@ import uz.pdp.app.lc.dto.UserUpdateDTO;
 import uz.pdp.app.lc.entity.UserEntity;
 import uz.pdp.app.lc.exception.DataNotFoundException;
 import uz.pdp.app.lc.repository.CourseRepository;
+import uz.pdp.app.lc.repository.GroupRepository;
 import uz.pdp.app.lc.repository.UserRepository;
 
 import static uz.pdp.app.lc.mapper.UserMapper.USER_MAPPER;
@@ -20,6 +21,8 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
 
     private final CourseRepository courseRepository;
+
+    private final GroupRepository groupRepository;
 
     @Override
     public UserEntity getById(Long id) {
@@ -51,6 +54,19 @@ public class UserServiceImpl implements UserService{
     @Override
     public Page<UserEntity> getAllStudents(Integer page, Integer size) {
         return userRepository.findAllStudents(PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<UserEntity> getStudentsByGroupId(Long groupId, Integer page, Integer size) {
+        if(!groupRepository.existsById(groupId))
+            throw new DataNotFoundException("Group not found with '" + groupId + "' id");
+        return userRepository.findStudentsByGroupId(groupId, PageRequest.of(page, size));
+    }
+    @Override
+    public Page<UserEntity> getStudentsByCourseId(Long courseId, Integer page, Integer size) {
+        if(!courseRepository.existsById(courseId))
+            throw new DataNotFoundException("Course not found with '" + courseId + "' id");
+        return userRepository.findStudentsByCourseId(courseId, PageRequest.of(page, size));
     }
 
     @Override
