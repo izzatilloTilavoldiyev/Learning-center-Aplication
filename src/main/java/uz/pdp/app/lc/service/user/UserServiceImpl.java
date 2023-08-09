@@ -34,13 +34,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Page<UserEntity> getAllStudents(Integer page, Integer size) {
-        return userRepository.findAllStudents(PageRequest.of(page, size));
+    public Page<UserEntity> getAllTeachers(Integer page, Integer size) {
+        return userRepository.findAllTeachers(PageRequest.of(page, size));
     }
 
     @Override
-    public Page<UserEntity> getAllTeachers(Integer page, Integer size) {
-        return userRepository.findAllTeachers(PageRequest.of(page, size));
+    public Page<UserEntity> getAllStudents(Integer page, Integer size) {
+        return userRepository.findAllStudents(PageRequest.of(page, size));
     }
 
     @Override

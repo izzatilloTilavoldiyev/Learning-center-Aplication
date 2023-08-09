@@ -13,9 +13,9 @@ public interface UserService {
 
     Page<UserEntity> getAllDeleted(Integer page, Integer size);
 
-    Page<UserEntity> getAllStudents(Integer page, Integer size);
-
     Page<UserEntity> getAllTeachers(Integer page, Integer size);
+
+    Page<UserEntity> getAllStudents(Integer page, Integer size);
 
     UserEntity updateUser(UserUpdateDTO userUpdateDTO);
 

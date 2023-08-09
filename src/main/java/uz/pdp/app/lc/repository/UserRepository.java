@@ -23,11 +23,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "from users u where u.deleted = true ")
     Page<UserEntity> findAllDeletedUsers(PageRequest of);
 
-    @Query(value = "from users u where u.role = 'STUDENT' and u.deleted = false ")
-    Page<UserEntity> findAllStudents(PageRequest of);
-
-    @Query(value = "from users u where u.role = 'TEACHER' and u.deleted = false ")
+    @Query(value = "from users u where u.role = 'TEACHER' and not u.deleted")
     Page<UserEntity> findAllTeachers(PageRequest of);
+
+    @Query(value = "from users u where u.role = 'STUDENT' and not u.deleted")
+    Page<UserEntity> findAllStudents(PageRequest of);
 
     @Query(value = "select count(u.id)>0 from users u where u.id = :id " +
             "and u.role = 'TEACHER' and not u.deleted")

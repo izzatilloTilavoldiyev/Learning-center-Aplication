@@ -21,10 +21,10 @@ public class UserController {
      *
      * ---get by id
      * ---get all pages
-     * get deleted pages
-     * get all teachers pages
+     * ---get deleted pages
+     * ---get all teachers pages
      * get all teachers by course id
-     * get all students pages
+     * ---get all students pages
      * get all students by group id
      * get all students by course id
      *
@@ -63,21 +63,23 @@ public class UserController {
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
-    @GetMapping("/get/all-students-page")
-    public ResponseEntity<ResponseDTO<Page<UserEntity>>> getAllStudents(
-            @RequestParam(required = false, defaultValue = "1") Integer page,
-            @RequestParam(required = false, defaultValue = "3") Integer size
-    ) {
-        return ResponseEntity.ok(new ResponseDTO<>(userService.getAllStudents(page, size)));
-    }
-
-    @PreAuthorize(value = "hasRole('MANAGER')")
-    @GetMapping("/get/all-teachers-page")
+    @GetMapping("/all-teachers")
     public ResponseEntity<ResponseDTO<Page<UserEntity>>> getAllTeachers(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "3") Integer size
     ) {
-        return ResponseEntity.ok(new ResponseDTO<>(userService.getAllTeachers(page, size)));
+        Page<UserEntity> allTeachers = userService.getAllTeachers(page, size);
+        return ResponseEntity.ok(new ResponseDTO<>(allTeachers));
+    }
+
+    @PreAuthorize(value = "hasRole('MANAGER')")
+    @GetMapping("/all-students")
+    public ResponseEntity<ResponseDTO<Page<UserEntity>>> getAllStudents(
+            @RequestParam(required = false, defaultValue = "1") Integer page,
+            @RequestParam(required = false, defaultValue = "3") Integer size
+    ) {
+        Page<UserEntity> allStudents = userService.getAllStudents(page, size);
+        return ResponseEntity.ok(new ResponseDTO<>(allStudents));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
