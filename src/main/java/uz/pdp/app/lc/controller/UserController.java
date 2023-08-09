@@ -1,5 +1,6 @@
 package uz.pdp.app.lc.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +29,10 @@ public class UserController {
      * get all students by group id
      * get all students by course id
      *
-     * update by id
-     * update profile
+     * ---update by id
+     * ---update profile
      *
-     * delete
+     * ---delete
      */
 
     private final UserService userService;
@@ -97,18 +98,24 @@ public class UserController {
 
 
     @PreAuthorize(value = "hasRole('MANAGER')")
-    @PutMapping("/update")
-    public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {
-        return ResponseEntity.ok(new ResponseDTO<>(userService.updateUser(userUpdateDTO)));
+    @PutMapping()
+    public ResponseEntity<ResponseDTO<UserEntity>> updateUser(
+            @Valid @RequestBody UserUpdateDTO userUpdateDTO
+    ) {
+        UserEntity updateUser = userService.updateUser(userUpdateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(updateUser));
     }
 
-    @PutMapping("/update/profile")
-    public ResponseEntity<ResponseDTO<UserEntity>> updateUser(@RequestBody ProfileUpdateDTO profileUpdateDTO) {
-        return ResponseEntity.ok(new ResponseDTO<>(userService.updateProfile(profileUpdateDTO)));
+    @PutMapping("/profile")
+    public ResponseEntity<ResponseDTO<UserEntity>> updateProfile(
+            @Valid @RequestBody ProfileUpdateDTO profileUpdateDTO
+    ) {
+        UserEntity updateProfile = userService.updateProfile(profileUpdateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(updateProfile));
     }
 
     @PreAuthorize(value = "hasRole('MANAGER')")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO<String>> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(new ResponseDTO<>("Success"));
