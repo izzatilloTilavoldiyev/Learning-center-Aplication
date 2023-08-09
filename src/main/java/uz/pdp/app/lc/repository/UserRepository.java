@@ -26,6 +26,13 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "from users u where u.role = 'TEACHER' and not u.deleted")
     Page<UserEntity> findAllTeachers(PageRequest of);
 
+    @Query(value = """
+           select * from users u join 
+           courses_teachers ct on u.id = ct.teacher_id 
+           where ct.course_id = :courseId and not u.deleted
+           """, nativeQuery = true)
+    Page<UserEntity> findTeachersByCourseId(Long courseId, PageRequest of);
+
     @Query(value = "from users u where u.role = 'STUDENT' and not u.deleted")
     Page<UserEntity> findAllStudents(PageRequest of);
 

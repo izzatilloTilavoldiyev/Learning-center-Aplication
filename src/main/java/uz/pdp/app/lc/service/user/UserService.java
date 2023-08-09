@@ -15,6 +15,8 @@ public interface UserService {
 
     Page<UserEntity> getAllTeachers(Integer page, Integer size);
 
+    Page<UserEntity> getTeachersByCourseId(Long courseId, Integer page, Integer size);
+
     Page<UserEntity> getAllStudents(Integer page, Integer size);
 
     UserEntity updateUser(UserUpdateDTO userUpdateDTO);

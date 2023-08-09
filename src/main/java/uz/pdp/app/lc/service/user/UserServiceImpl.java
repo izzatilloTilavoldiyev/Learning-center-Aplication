@@ -39,6 +39,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Page<UserEntity> getTeachersByCourseId(Long courseId, Integer page, Integer size) {
+        return userRepository.findTeachersByCourseId(courseId, PageRequest.of(page, size));
+    }
+
+    @Override
     public Page<UserEntity> getAllStudents(Integer page, Integer size) {
         return userRepository.findAllStudents(PageRequest.of(page, size));
     }
