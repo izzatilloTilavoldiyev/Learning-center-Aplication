@@ -14,9 +14,10 @@ public abstract class BaseEntity {
     private Long id;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(nullable = false, updatable = false)
     private Timestamp created_date;
 
     @UpdateTimestamp
+    @Column(nullable = false)
     private Timestamp updated_date;
 }

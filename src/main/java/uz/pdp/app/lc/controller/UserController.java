@@ -29,6 +29,9 @@ public class UserController {
      * ---get all students by group id
      * get all students by course id (repo query doesn't work)
      *
+     * searching query below
+     * select * from users u where lower(u.name) like lower(concat('%', '(my message)', '%'));
+     *
      * ---update by id
      * ---update profile
      *
